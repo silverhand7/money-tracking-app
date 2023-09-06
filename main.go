@@ -1,7 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/silverhand7/money-tracking-app/app"
+)
 
 func main() {
-	fmt.Println("hello World")
+	apiConfig := app.NewDB()
+	fmt.Println(apiConfig)
 }
