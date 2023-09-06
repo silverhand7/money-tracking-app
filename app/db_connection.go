@@ -2,22 +2,14 @@ package app
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
-	"net/http"
 	"os"
 
 	"github.com/joho/godotenv"
-	"github.com/julienschmidt/httprouter"
 	_ "github.com/lib/pq"
-	"github.com/silverhand7/money-tracking-app/app/data"
 )
 
-type ApiConfig struct {
-	DB *data.Queries
-}
-
-func NewDB() ApiConfig {
+func NewDB() *sql.DB {
 	godotenv.Load(".env")
 	portString := os.Getenv("PORT")
 	if portString == "" {
@@ -34,15 +26,5 @@ func NewDB() ApiConfig {
 		log.Fatal("Can't connect to database", err)
 	}
 
-	db := data.New(connection)
-
-	apiConfig := ApiConfig{
-		DB: db,
-	}
-
-	return apiConfig
-}
-
-func (apiconfig *ApiConfig) GetHomePage(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	fmt.Fprint(w, "hello world")
+	return connection
 }
