@@ -3,8 +3,10 @@ package services
 import (
 	"context"
 	"database/sql"
+	"time"
 
 	"github.com/silverhand7/money-tracking-app/helpers"
+	"github.com/silverhand7/money-tracking-app/models/domain"
 	"github.com/silverhand7/money-tracking-app/models/web/requests"
 	"github.com/silverhand7/money-tracking-app/models/web/responses"
 	"github.com/silverhand7/money-tracking-app/repositories"
@@ -35,7 +37,26 @@ func (service *UserService) GetAll(ctx context.Context) []responses.UserResponse
 }
 
 func (service *UserService) Create(ctx context.Context, request requests.UserCreateRequest) responses.UserResponse {
-	panic("not implemented") // TODO: Implement
+	tx, err := service.DB.Begin()
+	helpers.PanicIfError(err)
+	defer helpers.CommitOrRollback(tx)
+
+	user := domain.User{
+		Name:      request.Name,
+		Email:     request.Email,
+		CreatedAt: time.Now().UTC(),
+		UpdatedAt: time.Now().UTC(),
+	}
+
+	user = service.UserRepository.Save(ctx, tx, user)
+
+	return responses.UserResponse{
+		ID:        user.ID,
+		Name:      user.Name,
+		Email:     user.Email,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
+	}
 }
 
 func (service *UserService) Update(ctx context.Context, request requests.UserUpdateRequest) responses.UserResponse {

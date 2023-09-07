@@ -5,6 +5,7 @@ import (
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/silverhand7/money-tracking-app/helpers"
+	"github.com/silverhand7/money-tracking-app/models/web/requests"
 	"github.com/silverhand7/money-tracking-app/models/web/responses"
 	"github.com/silverhand7/money-tracking-app/services"
 )
@@ -20,6 +21,21 @@ func (controller *UserController) GetAll(w http.ResponseWriter, r *http.Request,
 		Code:   200,
 		Status: "OK",
 		Data:   userResponses,
+	}
+
+	helpers.WriteToResponseBody(w, webResponse)
+}
+
+func (controller *UserController) Create(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	userCreateRequest := requests.UserCreateRequest{}
+	helpers.ReadFromRequestBody(r, &userCreateRequest)
+
+	userResponse := controller.UserService.Create(r.Context(), userCreateRequest)
+
+	webResponse := responses.WebResponse{
+		Code:   200,
+		Status: "OK",
+		Data:   userResponse,
 	}
 
 	helpers.WriteToResponseBody(w, webResponse)

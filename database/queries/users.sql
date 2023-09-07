@@ -4,7 +4,7 @@ SELECT * FROM users;
 -- name: CreateUser :one
 INSERT INTO users (id, name, email, password, created_at, updated_at)
 VALUES($1, $2, $3, $4, $5, $6)
-RETURNING id, name, email;
+RETURNING id, name, email, created_at, updated_at;
 
 -- name: UpdateUserInformation :one
 UPDATE users SET

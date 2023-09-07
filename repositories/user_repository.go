@@ -6,6 +6,7 @@ import (
 
 	"github.com/silverhand7/money-tracking-app/helpers"
 	"github.com/silverhand7/money-tracking-app/models/domain"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserRepository struct {
@@ -39,18 +40,37 @@ func (userRepository *UserRepository) GetAll(ctx context.Context, tx *sql.Tx) []
 	return users
 }
 
-func (userRepository *UserRepository) Save(ctx context.Context, tx *sql.Tx, category domain.User) domain.User {
+func (userRepository *UserRepository) Save(ctx context.Context, tx *sql.Tx, user domain.User) domain.User {
+	SQL := "INSERT INTO users (name, email, password, created_at, updated_at) VALUES ($1, $2, $3, $4, $5) RETURNING id"
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	if err != nil {
+		panic(err)
+	}
+	var id int32
+	err = tx.QueryRowContext(
+		ctx,
+		SQL,
+		user.Name,
+		user.Email,
+		hashedPassword,
+		user.CreatedAt,
+		user.UpdatedAt,
+	).Scan(&id)
+
+	helpers.PanicIfError(err)
+
+	user.ID = int32(id)
+	return user
+}
+
+func (userRepository *UserRepository) Update(ctx context.Context, tx *sql.Tx, user domain.User) domain.User {
 	panic("not implemented") // TODO: Implement
 }
 
-func (userRepository *UserRepository) Update(ctx context.Context, tx *sql.Tx, category domain.User) domain.User {
+func (userRepository *UserRepository) Delete(ctx context.Context, tx *sql.Tx, user domain.User) {
 	panic("not implemented") // TODO: Implement
 }
 
-func (userRepository *UserRepository) Delete(ctx context.Context, tx *sql.Tx, category domain.User) {
-	panic("not implemented") // TODO: Implement
-}
-
-func (userRepository *UserRepository) FindById(ctx context.Context, tx *sql.Tx, categoryId int) (domain.User, error) {
+func (userRepository *UserRepository) FindById(ctx context.Context, tx *sql.Tx, userId int) (domain.User, error) {
 	panic("not implemented") // TODO: Implement
 }
