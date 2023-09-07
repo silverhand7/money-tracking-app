@@ -27,9 +27,11 @@ func (service *UserService) GetAll(ctx context.Context) []responses.UserResponse
 	var userResponses []responses.UserResponse
 	for _, user := range users {
 		userResponses = append(userResponses, responses.UserResponse{
-			ID:    user.ID,
-			Name:  user.Name,
-			Email: user.Email,
+			ID:        user.ID,
+			Name:      user.Name,
+			Email:     user.Email,
+			CreatedAt: user.CreatedAt,
+			UpdatedAt: user.UpdatedAt,
 		})
 	}
 
@@ -67,10 +69,25 @@ func (service *UserService) UpdatePassword(ctx context.Context, request requests
 	panic("not implemented") // TODO: Implement
 }
 
-func (service *UserService) Delete(ctx context.Context, userId int) {
+func (service *UserService) Delete(ctx context.Context, userId int32) {
 	panic("not implemented") // TODO: Implement
 }
 
-func (service *UserService) FindById(ctx context.Context, userId int) responses.UserResponse {
-	panic("not implemented") // TODO: Implement
+func (service *UserService) FindById(ctx context.Context, userId int32) responses.UserResponse {
+	tx, err := service.DB.Begin()
+	helpers.PanicIfError(err)
+	defer helpers.CommitOrRollback(tx)
+
+	user, err := service.UserRepository.FindById(ctx, tx, userId)
+	helpers.PanicIfError(err)
+
+	userResponse := responses.UserResponse{
+		ID:        user.ID,
+		Name:      user.Name,
+		Email:     user.Email,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
+	}
+
+	return userResponse
 }

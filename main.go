@@ -24,6 +24,7 @@ func main() {
 	}
 	router.GET("/api/users", userController.GetAll)
 	router.POST("/api/users", userController.Create)
+	router.GET("/api/users/:userId", userController.FindById)
 
 	server := http.Server{
 		Addr:    "localhost:8080",

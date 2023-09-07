@@ -3,6 +3,7 @@ package repositories
 import (
 	"context"
 	"database/sql"
+	"errors"
 
 	"github.com/silverhand7/money-tracking-app/helpers"
 	"github.com/silverhand7/money-tracking-app/models/domain"
@@ -63,14 +64,33 @@ func (userRepository *UserRepository) Save(ctx context.Context, tx *sql.Tx, user
 	return user
 }
 
+func (userRepository *UserRepository) FindById(ctx context.Context, tx *sql.Tx, userId int32) (domain.User, error) {
+	SQL := "SELECT id, name, email, password, created_at, updated_at FROM users WHERE id = $1"
+	rows, err := tx.QueryContext(ctx, SQL, userId)
+	helpers.PanicIfError(err)
+	defer rows.Close()
+
+	user := domain.User{}
+	if rows.Next() {
+		err := rows.Scan(
+			&user.ID,
+			&user.Name,
+			&user.Email,
+			&user.Password,
+			&user.CreatedAt,
+			&user.UpdatedAt,
+		)
+		helpers.PanicIfError(err)
+		return user, nil
+	}
+	return user, errors.New("user is not found")
+
+}
+
 func (userRepository *UserRepository) Update(ctx context.Context, tx *sql.Tx, user domain.User) domain.User {
 	panic("not implemented") // TODO: Implement
 }
 
 func (userRepository *UserRepository) Delete(ctx context.Context, tx *sql.Tx, user domain.User) {
-	panic("not implemented") // TODO: Implement
-}
-
-func (userRepository *UserRepository) FindById(ctx context.Context, tx *sql.Tx, userId int) (domain.User, error) {
 	panic("not implemented") // TODO: Implement
 }
