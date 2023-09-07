@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"time"
 
+	"github.com/go-playground/validator"
+	"github.com/silverhand7/money-tracking-app/exceptions"
 	"github.com/silverhand7/money-tracking-app/helpers"
 	"github.com/silverhand7/money-tracking-app/models/domain"
 	"github.com/silverhand7/money-tracking-app/models/web/requests"
@@ -15,6 +17,7 @@ import (
 type UserService struct {
 	UserRepository repositories.UserRepositoryContract
 	DB             *sql.DB
+	Validate       *validator.Validate
 }
 
 func (service *UserService) GetAll(ctx context.Context) []responses.UserResponse {
@@ -39,6 +42,9 @@ func (service *UserService) GetAll(ctx context.Context) []responses.UserResponse
 }
 
 func (service *UserService) Create(ctx context.Context, request requests.UserCreateRequest) responses.UserResponse {
+	err := service.Validate.Struct(request)
+	helpers.PanicIfError(err)
+
 	tx, err := service.DB.Begin()
 	helpers.PanicIfError(err)
 	defer helpers.CommitOrRollback(tx)
@@ -61,25 +67,15 @@ func (service *UserService) Create(ctx context.Context, request requests.UserCre
 	}
 }
 
-func (service *UserService) Update(ctx context.Context, request requests.UserUpdateRequest) responses.UserResponse {
-	panic("not implemented") // TODO: Implement
-}
-
-func (service *UserService) UpdatePassword(ctx context.Context, request requests.UserUpdatePasswordRequest) responses.UserResponse {
-	panic("not implemented") // TODO: Implement
-}
-
-func (service *UserService) Delete(ctx context.Context, userId int32) {
-	panic("not implemented") // TODO: Implement
-}
-
 func (service *UserService) FindById(ctx context.Context, userId int32) responses.UserResponse {
 	tx, err := service.DB.Begin()
 	helpers.PanicIfError(err)
 	defer helpers.CommitOrRollback(tx)
 
 	user, err := service.UserRepository.FindById(ctx, tx, userId)
-	helpers.PanicIfError(err)
+	if err != nil {
+		panic(exceptions.NewNotFoundError(err.Error()))
+	}
 
 	userResponse := responses.UserResponse{
 		ID:        user.ID,
@@ -90,4 +86,16 @@ func (service *UserService) FindById(ctx context.Context, userId int32) response
 	}
 
 	return userResponse
+}
+
+func (service *UserService) Update(ctx context.Context, request requests.UserUpdateRequest) responses.UserResponse {
+	panic("not implemented") // TODO: Implement
+}
+
+func (service *UserService) UpdatePassword(ctx context.Context, request requests.UserUpdatePasswordRequest) responses.UserResponse {
+	panic("not implemented") // TODO: Implement
+}
+
+func (service *UserService) Delete(ctx context.Context, userId int32) {
+	panic("not implemented") // TODO: Implement
 }
