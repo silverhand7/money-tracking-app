@@ -37,6 +37,22 @@ func main() {
 	router.PUT("/api/users/:userId", userController.Update)
 	router.DELETE("/api/users/:userId", userController.Delete)
 
+	categoryRepository := new(repositories.CategoryRepository)
+	categoryService := services.CategoryService{
+		CategoryRepository: categoryRepository,
+		DB:                 db,
+		Validate:           validate,
+	}
+
+	categoryController := controllers.CategoryController{
+		CategoryService: &categoryService,
+	}
+	router.GET("/api/categories", categoryController.GetAll)
+	router.POST("/api/categories", categoryController.Create)
+	router.GET("/api/categories/:categoryId", categoryController.FindById)
+	router.PUT("/api/categories/:categoryId", categoryController.Update)
+	router.DELETE("/api/categories/:categoryId", categoryController.Delete)
+
 	router.PanicHandler = exceptions.ErrorHandler
 
 	server := http.Server{
@@ -53,4 +69,5 @@ func main() {
 func initValidator(v validator.Validate) {
 	// Register the custom validation function.
 	v.RegisterValidation("passwordValidator", validators.PasswordValidator)
+	v.RegisterValidation("categoryTypeValidator", validators.ValidateType)
 }

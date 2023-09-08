@@ -13,10 +13,6 @@ import (
 type UserRepository struct {
 }
 
-func NewUserRepository() UserRepositoryContract {
-	return &UserRepository{}
-}
-
 func (userRepository *UserRepository) GetAll(ctx context.Context, tx *sql.Tx) []domain.User {
 	SQL := "SELECT id, name, email, password, created_at, updated_at FROM users"
 	rows, err := tx.QueryContext(ctx, SQL)
