@@ -74,3 +74,18 @@ func (controller *UserController) Update(w http.ResponseWriter, r *http.Request,
 
 	helpers.WriteToResponseBody(w, webResponse)
 }
+
+func (controller *UserController) Delete(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	userId, err := strconv.Atoi(params.ByName("userId"))
+	helpers.PanicIfError(err)
+
+	controller.UserService.Delete(r.Context(), int32(userId))
+
+	webResponse := responses.WebResponse{
+		Code:   200,
+		Status: "OK",
+		Data:   "",
+	}
+
+	helpers.WriteToResponseBody(w, webResponse)
+}

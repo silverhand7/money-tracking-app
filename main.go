@@ -35,6 +35,7 @@ func main() {
 	router.POST("/api/users", userController.Create)
 	router.GET("/api/users/:userId", userController.FindById)
 	router.PUT("/api/users/:userId", userController.Update)
+	router.DELETE("/api/users/:userId", userController.Delete)
 
 	router.PanicHandler = exceptions.ErrorHandler
 

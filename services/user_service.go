@@ -120,5 +120,14 @@ func (service *UserService) UpdatePassword(ctx context.Context, request requests
 }
 
 func (service *UserService) Delete(ctx context.Context, userId int32) {
-	panic("not implemented") // TODO: Implement
+	tx, err := service.DB.Begin()
+	helpers.PanicIfError(err)
+	defer helpers.CommitOrRollback(tx)
+
+	user, err := service.UserRepository.FindById(ctx, tx, userId)
+	if err != nil {
+		panic(exceptions.NewNotFoundError(err.Error()))
+	}
+
+	service.UserRepository.Delete(ctx, tx, user.ID)
 }

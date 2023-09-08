@@ -103,6 +103,8 @@ func (userRepository *UserRepository) Update(ctx context.Context, tx *sql.Tx, us
 	return user
 }
 
-func (userRepository *UserRepository) Delete(ctx context.Context, tx *sql.Tx, user domain.User) {
-	panic("not implemented") // TODO: Implement
+func (userRepository *UserRepository) Delete(ctx context.Context, tx *sql.Tx, userId int32) {
+	SQL := `DELETE FROM users WHERE id=$1`
+	_, err := tx.ExecContext(ctx, SQL, userId)
+	helpers.PanicIfError(err)
 }
