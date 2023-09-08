@@ -49,7 +49,7 @@ func (service *CategoryService) Create(ctx context.Context, request requests.Cat
 		ID:        category.ID,
 		Type:      category.Type,
 		Name:      category.Name,
-		Icon:      category.Icon,
+		Icon:      category.Icon.String,
 		CreatedAt: category.CreatedAt,
 		UpdatedAt: category.UpdatedAt,
 	}
@@ -89,7 +89,7 @@ func (service *CategoryService) Update(ctx context.Context, request requests.Cat
 		ID:        category.ID,
 		Type:      category.Type,
 		Name:      category.Name,
-		Icon:      category.Icon,
+		Icon:      category.Icon.String,
 		CreatedAt: category.CreatedAt,
 		UpdatedAt: category.UpdatedAt,
 	}
@@ -122,7 +122,7 @@ func (service *CategoryService) FindById(ctx context.Context, categoryId int32) 
 		ID:        category.ID,
 		Type:      category.Type,
 		Name:      category.Name,
-		Icon:      category.Icon,
+		Icon:      category.Icon.String,
 		CreatedAt: category.CreatedAt,
 		UpdatedAt: category.UpdatedAt,
 	}
@@ -146,7 +146,7 @@ func (service *CategoryService) GetAll(ctx context.Context) []responses.Category
 			ID:        category.ID,
 			Type:      category.Type,
 			Name:      category.Name,
-			Icon:      category.Icon,
+			Icon:      category.Icon.String,
 			CreatedAt: category.CreatedAt,
 			UpdatedAt: category.UpdatedAt,
 		}

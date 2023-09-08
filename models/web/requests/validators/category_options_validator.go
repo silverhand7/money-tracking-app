@@ -3,11 +3,11 @@ package validators
 import "github.com/go-playground/validator"
 
 type ValidType struct {
-	Type string `validate:"in=i e"` // income, expense
+	Type string `validate:"in=I E"` // income, expense
 }
 
 func ValidateType(fl validator.FieldLevel) bool {
-	validTypes := []string{"i", "e"}
+	validTypes := []string{"I", "E"}
 	value := fl.Field().String()
 
 	for _, validType := range validTypes {

@@ -13,7 +13,7 @@ type CategoryRepository struct {
 }
 
 func (repository *CategoryRepository) Save(ctx context.Context, tx *sql.Tx, category domain.Category) domain.Category {
-	SQL := "INSERT INTO categories (name, email, password, created_at, updated_at) VALUES ($1, $2, $3, $4, $5) RETURNING id"
+	SQL := "INSERT INTO categories (type, name, icon, created_at, updated_at) VALUES ($1, $2, $3, $4, $5) RETURNING id"
 
 	var id int32
 	err := tx.QueryRowContext(
@@ -36,7 +36,7 @@ func (repository *CategoryRepository) Update(ctx context.Context, tx *sql.Tx, ca
 	SQL := `UPDATE categories SET
 	type = $2,
 	name = $3,
-	icon = $4
+	icon = $4,
 	updated_at = $5
 	WHERE id = $1
 	RETURNING id, type, name, icon, created_at, updated_at`
@@ -72,7 +72,7 @@ func (repository *CategoryRepository) Delete(ctx context.Context, tx *sql.Tx, ca
 }
 
 func (repository *CategoryRepository) FindById(ctx context.Context, tx *sql.Tx, categoryId int32) (domain.Category, error) {
-	SQL := "SELECT id, name, email, password, created_at, updated_at FROM categories WHERE id = $1"
+	SQL := "SELECT * FROM categories WHERE id = $1"
 	rows, err := tx.QueryContext(ctx, SQL, categoryId)
 	helpers.PanicIfError(err)
 	defer rows.Close()
