@@ -55,3 +55,22 @@ func (controller *UserController) FindById(w http.ResponseWriter, r *http.Reques
 
 	helpers.WriteToResponseBody(w, webResponse)
 }
+
+func (controller *UserController) Update(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	userUpdateRequest := requests.UserUpdateRequest{}
+	helpers.ReadFromRequestBody(r, &userUpdateRequest)
+
+	userId, err := strconv.Atoi(params.ByName("userId"))
+	userUpdateRequest.ID = int32(userId)
+	helpers.PanicIfError(err)
+
+	userResponse := controller.UserService.Update(r.Context(), userUpdateRequest)
+
+	webResponse := responses.WebResponse{
+		Code:   200,
+		Status: "OK",
+		Data:   userResponse,
+	}
+
+	helpers.WriteToResponseBody(w, webResponse)
+}

@@ -89,7 +89,30 @@ func (service *UserService) FindById(ctx context.Context, userId int32) response
 }
 
 func (service *UserService) Update(ctx context.Context, request requests.UserUpdateRequest) responses.UserResponse {
-	panic("not implemented") // TODO: Implement
+	err := service.Validate.Struct(request)
+	helpers.PanicIfError(err)
+
+	tx, err := service.DB.Begin()
+	helpers.PanicIfError(err)
+	defer helpers.CommitOrRollback(tx)
+
+	user, err := service.UserRepository.FindById(ctx, tx, request.ID)
+	if err != nil {
+		panic(exceptions.NewNotFoundError(err.Error()))
+	}
+
+	user.Name = request.Name
+	user.Email = request.Email
+	user.UpdatedAt = time.Now()
+	user = service.UserRepository.Update(ctx, tx, user)
+
+	return responses.UserResponse{
+		ID:        user.ID,
+		Name:      user.Name,
+		Email:     user.Email,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
+	}
 }
 
 func (service *UserService) UpdatePassword(ctx context.Context, request requests.UserUpdatePasswordRequest) responses.UserResponse {

@@ -88,7 +88,19 @@ func (userRepository *UserRepository) FindById(ctx context.Context, tx *sql.Tx, 
 }
 
 func (userRepository *UserRepository) Update(ctx context.Context, tx *sql.Tx, user domain.User) domain.User {
-	panic("not implemented") // TODO: Implement
+	SQL := `UPDATE users SET
+	name = $2,
+	email = $3,
+	updated_at = $4
+	WHERE id = $1
+	RETURNING id, name, email, created_at, updated_at`
+
+	row := tx.QueryRowContext(ctx, SQL, user.ID, user.Name, user.Email, user.UpdatedAt)
+
+	err := row.Scan(&user.ID, &user.Name, &user.Email, &user.CreatedAt, &user.UpdatedAt)
+	helpers.PanicIfError(err)
+
+	return user
 }
 
 func (userRepository *UserRepository) Delete(ctx context.Context, tx *sql.Tx, user domain.User) {
