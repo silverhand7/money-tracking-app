@@ -53,6 +53,22 @@ func main() {
 	router.PUT("/api/categories/:categoryId", categoryController.Update)
 	router.DELETE("/api/categories/:categoryId", categoryController.Delete)
 
+	walletRepository := new(repositories.WalletRepository)
+	walletService := services.WalletService{
+		WalletRepository: walletRepository,
+		DB:               db,
+		Validate:         validate,
+	}
+
+	walletController := controllers.WalletController{
+		WalletService: &walletService,
+	}
+	router.GET("/api/wallets", walletController.GetAll)
+	router.POST("/api/wallets", walletController.Create)
+	router.GET("/api/wallets/:walletId", walletController.FindById)
+	router.PUT("/api/wallets/:walletId", walletController.Update)
+	router.DELETE("/api/wallets/:walletId", walletController.Delete)
+
 	router.PanicHandler = exceptions.ErrorHandler
 
 	server := http.Server{
