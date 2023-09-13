@@ -14,6 +14,7 @@ func ReadFromRequestBody(r *http.Request, result interface{}) {
 func WriteToResponseBody(w http.ResponseWriter, response interface{}) {
 	w.Header().Add("Content-Type", "application/json")
 	encoder := json.NewEncoder(w)
+
 	err := encoder.Encode(response)
 	PanicIfError(err)
 }

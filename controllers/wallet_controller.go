@@ -16,7 +16,9 @@ type WalletController struct {
 }
 
 func (controller *WalletController) GetAll(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	walletResponse := controller.WalletService.GetAll(r.Context())
+	apiKey := helpers.GetApiKey(r.Header)
+
+	walletResponse := controller.WalletService.GetAll(r.Context(), apiKey)
 
 	webResponse := responses.WebResponse{
 		Code:   200,
