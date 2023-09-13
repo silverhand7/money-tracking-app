@@ -8,6 +8,7 @@ import (
 	"github.com/silverhand7/money-tracking-app/app"
 	"github.com/silverhand7/money-tracking-app/controllers"
 	"github.com/silverhand7/money-tracking-app/exceptions"
+	"github.com/silverhand7/money-tracking-app/middleware"
 	"github.com/silverhand7/money-tracking-app/models/web/requests/validators"
 	"github.com/silverhand7/money-tracking-app/repositories"
 	"github.com/silverhand7/money-tracking-app/services"
@@ -63,11 +64,11 @@ func main() {
 	walletController := controllers.WalletController{
 		WalletService: &walletService,
 	}
-	router.GET("/api/wallets", walletController.GetAll)
-	router.POST("/api/wallets", walletController.Create)
-	router.GET("/api/wallets/:walletId", walletController.FindById)
-	router.PUT("/api/wallets/:walletId", walletController.Update)
-	router.DELETE("/api/wallets/:walletId", walletController.Delete)
+	router.GET("/api/wallets", middleware.Auth(walletController.GetAll, db))
+	router.POST("/api/wallets", middleware.Auth(walletController.Create, db))
+	router.GET("/api/wallets/:walletId", middleware.Auth(walletController.FindById, db))
+	router.PUT("/api/wallets/:walletId", middleware.Auth(walletController.Update, db))
+	router.DELETE("/api/wallets/:walletId", middleware.Auth(walletController.Delete, db))
 
 	router.PanicHandler = exceptions.ErrorHandler
 

@@ -33,6 +33,7 @@ func (service *UserService) GetAll(ctx context.Context) []responses.UserResponse
 			ID:        user.ID,
 			Name:      user.Name,
 			Email:     user.Email,
+			ApiKey:    user.ApiKey,
 			CreatedAt: user.CreatedAt,
 			UpdatedAt: user.UpdatedAt,
 		})
@@ -62,6 +63,7 @@ func (service *UserService) Create(ctx context.Context, request requests.UserCre
 		ID:        user.ID,
 		Name:      user.Name,
 		Email:     user.Email,
+		ApiKey:    user.ApiKey,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
 	}
@@ -81,6 +83,7 @@ func (service *UserService) FindById(ctx context.Context, userId int32) response
 		ID:        user.ID,
 		Name:      user.Name,
 		Email:     user.Email,
+		ApiKey:    user.ApiKey,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
 	}
@@ -110,6 +113,7 @@ func (service *UserService) Update(ctx context.Context, request requests.UserUpd
 		ID:        user.ID,
 		Name:      user.Name,
 		Email:     user.Email,
+		ApiKey:    user.ApiKey,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
 	}

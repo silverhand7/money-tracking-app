@@ -14,7 +14,7 @@ type UserRepository struct {
 }
 
 func (userRepository *UserRepository) GetAll(ctx context.Context, tx *sql.Tx) []domain.User {
-	SQL := "SELECT id, name, email, password, created_at, updated_at FROM users"
+	SQL := "SELECT id, name, email, api_key, created_at, updated_at FROM users"
 	rows, err := tx.QueryContext(ctx, SQL)
 	helpers.PanicIfError(err)
 	defer rows.Close()
@@ -26,7 +26,7 @@ func (userRepository *UserRepository) GetAll(ctx context.Context, tx *sql.Tx) []
 			&user.ID,
 			&user.Name,
 			&user.Email,
-			&user.Password,
+			&user.ApiKey,
 			&user.CreatedAt,
 			&user.UpdatedAt,
 		)
