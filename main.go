@@ -63,6 +63,7 @@ func main() {
 
 	walletController := controllers.WalletController{
 		WalletService: &walletService,
+		UserService:   &userService,
 	}
 	router.GET("/api/wallets", middleware.AuthMiddleware(walletController.GetAll, db))
 	router.POST("/api/wallets", middleware.AuthMiddleware(walletController.Create, db))

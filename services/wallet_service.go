@@ -20,12 +20,12 @@ type WalletService struct {
 	Validate         *validator.Validate
 }
 
-func (service *WalletService) GetAll(ctx context.Context, apiKey string) []responses.WalletResponse {
+func (service *WalletService) GetAll(ctx context.Context, userId int32) []responses.WalletResponse {
 	tx, err := service.DB.Begin()
 	helpers.PanicIfError(err)
 	defer helpers.CommitOrRollback(tx)
 
-	wallets := service.WalletRepository.GetAll(ctx, tx, apiKey)
+	wallets := service.WalletRepository.GetAll(ctx, tx, userId)
 
 	var walletResponses []responses.WalletResponse
 	for _, wallet := range wallets {

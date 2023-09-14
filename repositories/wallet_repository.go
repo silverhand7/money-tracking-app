@@ -12,9 +12,9 @@ import (
 type WalletRepository struct {
 }
 
-func (repository *WalletRepository) GetAll(ctx context.Context, tx *sql.Tx, apiKey string) []domain.Wallet {
+func (repository *WalletRepository) GetAll(ctx context.Context, tx *sql.Tx, userId int32) []domain.Wallet {
 	SQL := "SELECT * FROM wallets WHERE user_id = $1"
-	rows, err := tx.QueryContext(ctx, SQL, apiKey)
+	rows, err := tx.QueryContext(ctx, SQL, userId)
 	helpers.PanicIfError(err)
 	defer rows.Close()
 

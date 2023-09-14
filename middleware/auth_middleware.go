@@ -21,6 +21,6 @@ func AuthMiddleware(handler authedHandler, db *sql.DB) httprouter.Handle {
 		// 	return
 		// }
 		// fmt.Println("middleware")
-		handler(w, r, nil)
+		handler(w, r, p)
 	}
 }

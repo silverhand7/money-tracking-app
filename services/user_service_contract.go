@@ -14,4 +14,5 @@ type UserServiceContract interface {
 	Delete(ctx context.Context, userId int32)
 	FindById(ctx context.Context, userId int32) responses.UserResponse
 	GetAll(ctx context.Context) []responses.UserResponse
+	FindByApiKey(ctx context.Context, userId string) responses.UserResponse
 }

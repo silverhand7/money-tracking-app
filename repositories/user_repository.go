@@ -61,7 +61,7 @@ func (userRepository *UserRepository) Save(ctx context.Context, tx *sql.Tx, user
 }
 
 func (userRepository *UserRepository) FindById(ctx context.Context, tx *sql.Tx, userId int32) (domain.User, error) {
-	SQL := "SELECT id, name, email, password, created_at, updated_at FROM users WHERE id = $1"
+	SQL := "SELECT id, name, email, password, api_key, created_at, updated_at FROM users WHERE id = $1"
 	rows, err := tx.QueryContext(ctx, SQL, userId)
 	helpers.PanicIfError(err)
 	defer rows.Close()
@@ -73,6 +73,7 @@ func (userRepository *UserRepository) FindById(ctx context.Context, tx *sql.Tx, 
 			&user.Name,
 			&user.Email,
 			&user.Password,
+			&user.ApiKey,
 			&user.CreatedAt,
 			&user.UpdatedAt,
 		)
@@ -80,7 +81,30 @@ func (userRepository *UserRepository) FindById(ctx context.Context, tx *sql.Tx, 
 		return user, nil
 	}
 	return user, errors.New("user is not found")
+}
 
+func (userRepository *UserRepository) FindByApiKey(ctx context.Context, tx *sql.Tx, apiKey string) (domain.User, error) {
+	SQL := "SELECT * FROM users WHERE api_key = $1"
+	rows, err := tx.QueryContext(ctx, SQL, apiKey)
+	helpers.PanicIfError(err)
+
+	defer rows.Close()
+	user := domain.User{}
+	if rows.Next() {
+		err := rows.Scan(
+			&user.ID,
+			&user.Name,
+			&user.Email,
+			&user.Password,
+			&user.CreatedAt,
+			&user.UpdatedAt,
+			&user.ApiKey,
+		)
+		helpers.PanicIfError(err)
+		return user, nil
+	}
+
+	return user, errors.New("user is not found")
 }
 
 func (userRepository *UserRepository) Update(ctx context.Context, tx *sql.Tx, user domain.User) domain.User {

@@ -91,6 +91,29 @@ func (service *UserService) FindById(ctx context.Context, userId int32) response
 	return userResponse
 }
 
+func (service *UserService) FindByApiKey(ctx context.Context, apiKey string) responses.UserResponse {
+	tx, err := service.DB.Begin()
+	helpers.PanicIfError(err)
+	defer helpers.CommitOrRollback(tx)
+
+	user, err := service.UserRepository.FindByApiKey(ctx, tx, apiKey)
+
+	if err != nil {
+		panic(exceptions.NewNotFoundError(err.Error()))
+	}
+
+	userResponse := responses.UserResponse{
+		ID:        user.ID,
+		Name:      user.Name,
+		Email:     user.Email,
+		ApiKey:    user.ApiKey,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
+	}
+
+	return userResponse
+}
+
 func (service *UserService) Update(ctx context.Context, request requests.UserUpdateRequest) responses.UserResponse {
 	err := service.Validate.Struct(request)
 	helpers.PanicIfError(err)
