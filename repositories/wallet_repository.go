@@ -38,9 +38,9 @@ func (repository *WalletRepository) GetAll(ctx context.Context, tx *sql.Tx, user
 	return wallets
 }
 
-func (repository *WalletRepository) FindById(ctx context.Context, tx *sql.Tx, walletId int32) (domain.Wallet, error) {
-	SQL := "SELECT * FROM wallets WHERE id = $1"
-	rows, err := tx.QueryContext(ctx, SQL, walletId)
+func (repository *WalletRepository) FindById(ctx context.Context, tx *sql.Tx, walletId int32, userId int32) (domain.Wallet, error) {
+	SQL := "SELECT * FROM wallets WHERE id = $1 and user_id = $2"
+	rows, err := tx.QueryContext(ctx, SQL, walletId, userId)
 	helpers.PanicIfError(err)
 	defer rows.Close()
 

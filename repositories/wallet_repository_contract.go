@@ -9,7 +9,7 @@ import (
 
 type WalletRepositoryContract interface {
 	GetAll(ctx context.Context, tx *sql.Tx, userId int32) []domain.Wallet
-	FindById(ctx context.Context, tx *sql.Tx, walletId int32) (domain.Wallet, error)
+	FindById(ctx context.Context, tx *sql.Tx, walletId int32, userId int32) (domain.Wallet, error)
 	Save(ctx context.Context, tx *sql.Tx, wallet domain.Wallet) domain.Wallet
 	Update(ctx context.Context, tx *sql.Tx, wallet domain.Wallet) domain.Wallet
 	Delete(ctx context.Context, tx *sql.Tx, walletId int32)

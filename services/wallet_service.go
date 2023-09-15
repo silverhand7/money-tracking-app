@@ -44,12 +44,12 @@ func (service *WalletService) GetAll(ctx context.Context, userId int32) []respon
 	return walletResponses
 }
 
-func (service *WalletService) FindById(ctx context.Context, walletId int32) responses.WalletResponse {
+func (service *WalletService) FindById(ctx context.Context, walletId int32, userId int32) responses.WalletResponse {
 	tx, err := service.DB.Begin()
 	helpers.PanicIfError(err)
 	defer helpers.CommitOrRollback(tx)
 
-	wallet, err := service.WalletRepository.FindById(ctx, tx, walletId)
+	wallet, err := service.WalletRepository.FindById(ctx, tx, walletId, userId)
 	if err != nil {
 		panic(exceptions.NewNotFoundError(err.Error()))
 	}
@@ -116,7 +116,7 @@ func (service *WalletService) Update(ctx context.Context, request requests.Walle
 	helpers.PanicIfError(err)
 	defer helpers.CommitOrRollback(tx)
 
-	wallet, err := service.WalletRepository.FindById(ctx, tx, request.ID)
+	wallet, err := service.WalletRepository.FindById(ctx, tx, request.ID, 1)
 	if err != nil {
 		panic(exceptions.NewNotFoundError(err.Error()))
 	}
@@ -158,7 +158,7 @@ func (service *WalletService) Delete(ctx context.Context, walletId int32) {
 	helpers.PanicIfError(err)
 	defer helpers.CommitOrRollback(tx)
 
-	wallet, err := service.WalletRepository.FindById(ctx, tx, walletId)
+	wallet, err := service.WalletRepository.FindById(ctx, tx, walletId, 1)
 	if err != nil {
 		panic(exceptions.NewNotFoundError(err.Error()))
 	}

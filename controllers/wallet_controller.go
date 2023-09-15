@@ -47,9 +47,12 @@ func (controller *WalletController) Create(w http.ResponseWriter, r *http.Reques
 }
 
 func (controller *WalletController) FindById(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	apiKey := helpers.GetApiKey(r.Header)
+	user := controller.UserService.FindByApiKey(r.Context(), apiKey)
+
 	walletId, err := strconv.Atoi(params.ByName("walletId"))
 	helpers.PanicIfError(err)
-	walletResponse := controller.WalletService.FindById(r.Context(), int32(walletId))
+	walletResponse := controller.WalletService.FindById(r.Context(), int32(walletId), user.ID)
 
 	webResponse := responses.WebResponse{
 		Code:   200,
