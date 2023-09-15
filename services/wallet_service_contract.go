@@ -10,7 +10,7 @@ import (
 type WalletServiceContract interface {
 	Create(ctx context.Context, request requests.WalletCreateRequest) responses.WalletResponse
 	Update(ctx context.Context, request requests.WalletUpdateRequest) responses.WalletResponse
-	Delete(ctx context.Context, walletId int32)
+	Delete(ctx context.Context, walletId int32, userId int32)
 	FindById(ctx context.Context, walletId int32, userId int32) responses.WalletResponse
 	GetAll(ctx context.Context, userId int32) []responses.WalletResponse
 }

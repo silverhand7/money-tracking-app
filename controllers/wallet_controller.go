@@ -32,8 +32,13 @@ func (controller *WalletController) GetAll(w http.ResponseWriter, r *http.Reques
 }
 
 func (controller *WalletController) Create(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	apiKey := helpers.GetApiKey(r.Header)
+	user := controller.UserService.FindByApiKey(r.Context(), apiKey)
+
 	walletCreateRequest := requests.WalletCreateRequest{}
 	helpers.ReadFromRequestBody(r, &walletCreateRequest)
+
+	walletCreateRequest.UserID = user.ID
 
 	walletResponse := controller.WalletService.Create(r.Context(), walletCreateRequest)
 
@@ -71,6 +76,11 @@ func (controller *WalletController) Update(w http.ResponseWriter, r *http.Reques
 	walletUpdateRequest.ID = int32(walletId)
 	helpers.PanicIfError(err)
 
+	apiKey := helpers.GetApiKey(r.Header)
+	user := controller.UserService.FindByApiKey(r.Context(), apiKey)
+
+	walletUpdateRequest.UserID = user.ID
+
 	walletResponse := controller.WalletService.Update(r.Context(), walletUpdateRequest)
 
 	webResponse := responses.WebResponse{
@@ -86,7 +96,10 @@ func (controller *WalletController) Delete(w http.ResponseWriter, r *http.Reques
 	walletId, err := strconv.Atoi(params.ByName("walletId"))
 	helpers.PanicIfError(err)
 
-	controller.WalletService.Delete(r.Context(), int32(walletId))
+	apiKey := helpers.GetApiKey(r.Header)
+	user := controller.UserService.FindByApiKey(r.Context(), apiKey)
+
+	controller.WalletService.Delete(r.Context(), int32(walletId), user.ID)
 
 	webResponse := responses.WebResponse{
 		Code:   200,
