@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"io/fs"
 	"net/http"
+	"strings"
 
 	"github.com/go-playground/validator"
 	"github.com/julienschmidt/httprouter"
@@ -17,13 +19,27 @@ import (
 )
 
 func frontendHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+
+	if r.Method != http.MethodGet {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		fmt.Fprintln(w, http.StatusText(http.StatusMethodNotAllowed))
+		return
+	}
+
+	if strings.HasPrefix(r.URL.Path, "/api") {
+		http.NotFound(w, r)
+		return
+	}
+
 	if r.URL.Path == "/favicon.ico" {
 		rawFile, _ := ui.StaticFiles.ReadFile("dist/favicon.ico")
 		w.Write(rawFile)
 		return
 	}
+
 	rawFile, _ := ui.StaticFiles.ReadFile("dist/index.html")
 	w.Write(rawFile)
+
 }
 
 func main() {
@@ -35,9 +51,15 @@ func main() {
 	router := httprouter.New()
 
 	router.GET("/", frontendHandler)
+	router.GET("/about", frontendHandler)
+	router.NotFound = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		frontendHandler(w, r, nil)
+	})
 
-	staticFS, _ := fs.Sub(ui.StaticFiles, "dist/static")
-	router.ServeFiles("/static/*filepath", http.FS(staticFS))
+	// static files
+	staticFS, _ := fs.Sub(ui.StaticFiles, "dist")
+	httpFS := http.FileServer(http.FS(staticFS))
+	router.Handler(http.MethodGet, "/static/*filepath", httpFS)
 
 	userRepository := new(repositories.UserRepository)
 	userService := services.UserService{
@@ -108,7 +130,7 @@ func main() {
 
 	router.PanicHandler = exceptions.ErrorHandler
 
-	server := http.Server{
+	server := &http.Server{
 		Addr:    "localhost:8080",
 		Handler: router,
 	}
