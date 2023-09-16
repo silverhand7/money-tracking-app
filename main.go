@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io/fs"
 	"net/http"
 
 	"github.com/go-playground/validator"
@@ -12,7 +13,18 @@ import (
 	"github.com/silverhand7/money-tracking-app/models/web/requests/validators"
 	"github.com/silverhand7/money-tracking-app/repositories"
 	"github.com/silverhand7/money-tracking-app/services"
+	"github.com/silverhand7/money-tracking-app/ui"
 )
+
+func frontendHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	if r.URL.Path == "/favicon.ico" {
+		rawFile, _ := ui.StaticFiles.ReadFile("dist/favicon.ico")
+		w.Write(rawFile)
+		return
+	}
+	rawFile, _ := ui.StaticFiles.ReadFile("dist/index.html")
+	w.Write(rawFile)
+}
 
 func main() {
 	db := app.NewDB()
@@ -21,6 +33,11 @@ func main() {
 	initValidator(*validate)
 
 	router := httprouter.New()
+
+	router.GET("/", frontendHandler)
+
+	staticFS, _ := fs.Sub(ui.StaticFiles, "dist/static")
+	router.ServeFiles("/static/*filepath", http.FS(staticFS))
 
 	userRepository := new(repositories.UserRepository)
 	userService := services.UserService{
