@@ -59,7 +59,7 @@ func main() {
 	// static files
 	staticFS, _ := fs.Sub(ui.StaticFiles, "dist")
 	httpFS := http.FileServer(http.FS(staticFS))
-	router.Handler(http.MethodGet, "/static/*filepath", httpFS)
+	router.Handler(http.MethodGet, "/assets/*filepath", httpFS)
 
 	userRepository := new(repositories.UserRepository)
 	userService := services.UserService{

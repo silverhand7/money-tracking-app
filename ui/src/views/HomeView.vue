@@ -1,19 +1,27 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <div>Test Test 123</div>
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <main>
+      <TheWelcome />
+  </main>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import TheWelcome from '../components/TheWelcome.vue'
+import config from '@/config.js'
+import axios from 'axios'
 
-export default {
-  name: 'HomeView',
+export default{
   components: {
-    HelloWorld
+    TheWelcome
+  },
+  created(){
+    axios.get(config.basePath + "/api/categories")
+      .then((response) => {
+        console.log(response)
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
   }
 }
+
 </script>
