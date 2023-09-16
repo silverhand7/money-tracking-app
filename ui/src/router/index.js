@@ -8,7 +8,8 @@ const router = createRouter({
       path: '/',
       name: 'home',
       alias: ['/index.html'],
-      component: HomeView
+      // component: HomeView
+      component: () => import('@/views/CategoryView.vue')
     },
     {
       path: '/about',
@@ -17,6 +18,11 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue')
+    },
+    {
+      path: '/categories',
+      name: 'categories',
+      component: () => import('@/views/CategoryView.vue')
     },
     {
       path: '/:pathMatch(.*)*',

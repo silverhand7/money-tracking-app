@@ -1,19 +1,28 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
-  <header>
-    <div class="wrapper">
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+  <div class="max-w-xl h-screen mx-auto bg-slate-100 relative">
+    <div class="w-100 px-5 py-5">
+      <RouterView />
     </div>
-  </header>
 
-  <RouterView />
+    <footer class="bg-slate-200 absolute bottom-0 w-full flex justify-around">
+      <RouterLink to="/" class="py-3 max-w-[25px]">
+        <img src="@/assets/images/home.png" alt="home">
+      </RouterLink>
+      <RouterLink to="/about" class="py-3 max-w-[25px]">
+        <img src="@/assets/images/wallet.png" alt="wallet">
+      </RouterLink>
+      <RouterLink to="/" class="py-3 max-w-[25px]">
+        <img src="@/assets/images/trend.png" alt="trend">
+      </RouterLink>
+      <RouterLink to="/about" class="py-3 max-w-[25px]">
+        <img src="@/assets/images/user.png" alt="user">
+      </RouterLink>
+    </footer>
+  </div>
 </template>
 
 <style scoped>
