@@ -1,5 +1,5 @@
 <template>
-    <CategoryForm class="mb-4" />
+    <CategoryForm class="mb-4" @on-submit="addCategory" />
 
     <CardContainer>
         <PageTitle title="List Categories" />
@@ -43,13 +43,37 @@ export default {
         }
     },
     created() {
-        axios.get(config.basePath + "/api/categories")
+        axios.get(config.basePath + "/api/categories", {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
         .then((response) => {
             this.categories = response.data.data
         })
         .catch((error) => {
             console.error('Error fetching data:', error);
         });
+    },
+    methods:{
+        addCategory(input) {
+            axios.post(
+                config.basePath + "/api/categories",
+                {
+                    name: input.name,
+                    icon: input.icon,
+                    type: input.type
+                },
+                {
+                    headers: {
+                        'Content-Type': 'text/plain; charset=utf-8'
+                    }
+                }
+            )
+            .then((response) => {
+                console.log(response)
+            })
+        }
     }
 }
 

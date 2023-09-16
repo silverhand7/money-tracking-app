@@ -87,11 +87,11 @@ func main() {
 	categoryController := controllers.CategoryController{
 		CategoryService: &categoryService,
 	}
-	router.GET("/api/categories", categoryController.GetAll)
-	router.POST("/api/categories", categoryController.Create)
-	router.GET("/api/categories/:categoryId", categoryController.FindById)
-	router.PUT("/api/categories/:categoryId", categoryController.Update)
-	router.DELETE("/api/categories/:categoryId", categoryController.Delete)
+	router.GET("/api/categories", middleware.CorsMiddleware(categoryController.GetAll))
+	router.POST("/api/categories", middleware.CorsMiddleware(categoryController.Create))
+	router.GET("/api/categories/:categoryId", middleware.CorsMiddleware(categoryController.FindById))
+	router.PUT("/api/categories/:categoryId", middleware.CorsMiddleware(categoryController.Update))
+	router.DELETE("/api/categories/:categoryId", middleware.CorsMiddleware(categoryController.Delete))
 
 	walletRepository := new(repositories.WalletRepository)
 	walletService := services.WalletService{

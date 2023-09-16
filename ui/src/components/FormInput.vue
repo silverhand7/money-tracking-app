@@ -3,7 +3,7 @@
         <label class="label">
             <span class="label-text">{{ label }}</span>
         </label>
-        <input :type="type" :placeholder="placeholder" class="input input-bordered" />
+        <input @keyup="sendValue" :type="type" :placeholder="placeholder" class="input input-bordered" />
     </div>
 </template>
 
@@ -23,6 +23,16 @@ export default {
             type: String,
             default: "Input here"
         },
+    },
+    data(){
+        return {
+            input: ""
+        }
+    },
+    methods: {
+        sendValue(event){
+            this.$emit('emitValue', event.target.value)
+        }
     }
 }
 

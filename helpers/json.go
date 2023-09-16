@@ -13,7 +13,6 @@ func ReadFromRequestBody(r *http.Request, result interface{}) {
 
 func WriteToResponseBody(w http.ResponseWriter, response interface{}) {
 	w.Header().Add("Content-Type", "application/json")
-	w.Header().Add("Access-Control-Allow-Origin", "*")
 	encoder := json.NewEncoder(w)
 
 	err := encoder.Encode(response)
