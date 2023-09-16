@@ -71,6 +71,24 @@ func main() {
 	router.PUT("/api/wallets/:walletId", middleware.AuthMiddleware(walletController.Update, db))
 	router.DELETE("/api/wallets/:walletId", middleware.AuthMiddleware(walletController.Delete, db))
 
+	transactionRepository := new(repositories.TransactionRepository)
+	transactionService := services.TransactionService{
+		TransactionRepository: transactionRepository,
+		DB:                    db,
+		Validate:              validate,
+	}
+
+	transactionController := controllers.TransactionController{
+		TransactionService: &transactionService,
+		UserService:        &userService,
+		WalletService:      &walletService,
+	}
+	router.GET("/api/transactions", transactionController.GetAll)
+	router.POST("/api/transactions", transactionController.Create)
+	router.GET("/api/transactions/:transactionId", transactionController.FindById)
+	router.PUT("/api/transactions/:transactionId", transactionController.Update)
+	router.DELETE("/api/transactions/:transactionId", transactionController.Delete)
+
 	router.PanicHandler = exceptions.ErrorHandler
 
 	server := http.Server{
