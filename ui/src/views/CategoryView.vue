@@ -1,7 +1,7 @@
 <template>
-    <CategoryForm class="mb-4" @on-submit="addCategory" />
+    <CategoryForm class="category-form mb-4" @on-submit="addCategory" />
 
-    <CardContainer>
+    <CardContainer class="overflow-x-auto h-fit">
         <PageTitle title="List Categories" />
         <div class="overflow-x-auto">
             <table class="table">
@@ -54,6 +54,8 @@ export default {
         .catch((error) => {
             console.error('Error fetching data:', error);
         });
+
+
     },
     methods:{
         addCategory(input) {
@@ -71,7 +73,7 @@ export default {
                 }
             )
             .then((response) => {
-                console.log(response)
+                this.categories.push(response.data.data)
             })
         }
     }

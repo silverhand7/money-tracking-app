@@ -3,12 +3,12 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-  <div class="max-w-xl h-screen mx-auto bg-slate-100 relative">
-    <div class="w-100 px-5 py-5">
+  <div class="max-w-xl h-full mx-auto bg-slate-100 relative">
+    <div class="w-100 px-5 pt-5 pb-16">
       <RouterView />
     </div>
 
-    <footer class="bg-slate-200 absolute bottom-0 w-full flex justify-around">
+    <footer class="bg-slate-200 fixed bottom-0 w-full flex justify-around">
       <RouterLink to="/" class="py-3 max-w-[25px]">
         <img src="@/assets/images/home.png" alt="home">
       </RouterLink>
