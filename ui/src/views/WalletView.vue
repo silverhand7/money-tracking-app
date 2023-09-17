@@ -1,24 +1,26 @@
 <template>
     <!-- <CategoryForm class="category-form mb-4" @on-submit="addCategory" /> -->
     <div class="text-right mb-2">
-        <RouterLink :to="{ name: 'categories.create' }" class="btn btn-secondary mb-2">Add New</RouterLink>
+        <RouterLink :to="{ name: 'wallets.create' }" class="btn btn-secondary mb-2">Add New</RouterLink>
     </div>
     <CardContainer class="overflow-x-auto h-fit">
-        <PageTitle title="List Categories" />
+        <PageTitle title="List Wallets" />
         <div class="overflow-x-auto">
             <table class="table">
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>Name</th>
-                        <th>Type</th>
+                        <th>Currency</th>
+                        <th>Balance</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="category in categories">
-                        <th>{{ category.id }}</th>
-                        <td>{{ category.name }}</td>
-                        <td><div class="badge" :class="[category.type == 'E' ? 'badge-secondary' : 'badge-primary']">{{ category.type == 'E' ? 'expense' : 'income' }}</div></td>
+                    <tr v-for="wallet in wallets">
+                        <td>{{ wallet.id }}</td>
+                        <td>{{ wallet.name }}</td>
+                        <td>{{ wallet.currency }}</td>
+                        <td>{{ wallet.balance }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -41,17 +43,20 @@ export default {
     },
     data() {
         return {
-            categories: []
+            wallets: []
         }
     },
     created() {
-        axios.get(config.basePath + "/api/categories", {
+        let headers = {
             headers: {
-
+                // 'Access-Control-Allow-Origin': '*',
+                // 'Content-Type': 'application/json',
+                'Authorization': 'Bearer 567311593646bec7c5b896f264f1b59dee9a1db599865d70bdc81a095a4cb5ad',
             }
-        })
+        }
+        axios.get(config.basePath + "/api/wallets", headers)
         .then((response) => {
-            this.categories = response.data.data
+            this.wallets = response.data.data
         })
         .catch((error) => {
             console.error('Error fetching data:', error);

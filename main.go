@@ -104,11 +104,11 @@ func main() {
 		WalletService: &walletService,
 		UserService:   &userService,
 	}
-	router.GET("/api/wallets", middleware.AuthMiddleware(walletController.GetAll, db))
-	router.POST("/api/wallets", middleware.AuthMiddleware(walletController.Create, db))
-	router.GET("/api/wallets/:walletId", middleware.AuthMiddleware(walletController.FindById, db))
-	router.PUT("/api/wallets/:walletId", middleware.AuthMiddleware(walletController.Update, db))
-	router.DELETE("/api/wallets/:walletId", middleware.AuthMiddleware(walletController.Delete, db))
+	router.GET("/api/wallets", middleware.CorsMiddleware(walletController.GetAll))
+	router.POST("/api/wallets", middleware.CorsMiddleware(walletController.Create))
+	router.GET("/api/wallets/:walletId", middleware.CorsMiddleware(walletController.FindById))
+	router.PUT("/api/wallets/:walletId", middleware.CorsMiddleware(walletController.Update))
+	router.DELETE("/api/wallets/:walletId", middleware.CorsMiddleware(walletController.Delete))
 
 	transactionRepository := new(repositories.TransactionRepository)
 	transactionService := services.TransactionService{

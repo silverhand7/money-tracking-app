@@ -25,6 +25,21 @@ const router = createRouter({
       component: () => import('@/views/CategoryView.vue')
     },
     {
+      path: '/categories/create',
+      name: 'categories.create',
+      component: () => import('@/views/CategoryForm.vue')
+    },
+    {
+      path: '/wallets',
+      name: 'wallets',
+      component: () => import('@/views/WalletView.vue')
+    },
+    {
+      path: '/wallet/create',
+      name: 'wallets.create',
+      component: () => import('@/views/WalletForm.vue')
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'NotFound',
       component: () => import('@/views/NotFoundView.vue')
