@@ -15,9 +15,10 @@ import (
 )
 
 type WalletService struct {
-	WalletRepository repositories.WalletRepositoryContract
-	DB               *sql.DB
-	Validate         *validator.Validate
+	WalletRepository      repositories.WalletRepositoryContract
+	TransactionRepository repositories.TransactionRepositoryContract
+	DB                    *sql.DB
+	Validate              *validator.Validate
 }
 
 func (service *WalletService) GetAll(ctx context.Context, userId int32) []responses.WalletResponse {
@@ -94,6 +95,15 @@ func (service *WalletService) Create(ctx context.Context, request requests.Walle
 	}
 
 	wallet = service.WalletRepository.Save(ctx, tx, wallet)
+
+	service.TransactionRepository.Save(ctx, tx, domain.Transaction{
+		WalletID:   wallet.ID,
+		CategoryID: 1,
+		Nominal:    wallet.Balance,
+		DateTime:   time.Now(),
+		CreatedAt:  time.Now(),
+		UpdatedAt:  time.Now(),
+	})
 
 	return responses.WalletResponse{
 		ID:        wallet.ID,

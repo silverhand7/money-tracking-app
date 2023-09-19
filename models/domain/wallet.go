@@ -10,7 +10,7 @@ type Wallet struct {
 	Name      string
 	Icon      sql.NullString
 	Currency  string
-	Balance   int32
+	Balance   int64
 	UserID    int32
 	CreatedAt time.Time
 	UpdatedAt time.Time

@@ -71,11 +71,6 @@ func main() {
 	userController := controllers.UserController{
 		UserService: &userService,
 	}
-	router.GET("/api/users", userController.GetAll)
-	router.POST("/api/users", userController.Create)
-	router.GET("/api/users/:userId", userController.FindById)
-	router.PUT("/api/users/:userId", userController.Update)
-	router.DELETE("/api/users/:userId", userController.Delete)
 
 	categoryRepository := new(repositories.CategoryRepository)
 	categoryService := services.CategoryService{
@@ -87,30 +82,22 @@ func main() {
 	categoryController := controllers.CategoryController{
 		CategoryService: &categoryService,
 	}
-	router.GET("/api/categories", middleware.CorsMiddleware(categoryController.GetAll))
-	router.POST("/api/categories", middleware.CorsMiddleware(categoryController.Create))
-	router.GET("/api/categories/:categoryId", middleware.CorsMiddleware(categoryController.FindById))
-	router.PUT("/api/categories/:categoryId", middleware.CorsMiddleware(categoryController.Update))
-	router.DELETE("/api/categories/:categoryId", middleware.CorsMiddleware(categoryController.Delete))
+
+	transactionRepository := new(repositories.TransactionRepository)
 
 	walletRepository := new(repositories.WalletRepository)
 	walletService := services.WalletService{
-		WalletRepository: walletRepository,
-		DB:               db,
-		Validate:         validate,
+		WalletRepository:      walletRepository,
+		TransactionRepository: transactionRepository,
+		DB:                    db,
+		Validate:              validate,
 	}
 
 	walletController := controllers.WalletController{
 		WalletService: &walletService,
 		UserService:   &userService,
 	}
-	router.GET("/api/wallets", middleware.CorsMiddleware(walletController.GetAll))
-	router.POST("/api/wallets", middleware.CorsMiddleware(walletController.Create))
-	router.GET("/api/wallets/:walletId", middleware.CorsMiddleware(walletController.FindById))
-	router.PUT("/api/wallets/:walletId", middleware.CorsMiddleware(walletController.Update))
-	router.DELETE("/api/wallets/:walletId", middleware.CorsMiddleware(walletController.Delete))
 
-	transactionRepository := new(repositories.TransactionRepository)
 	transactionService := services.TransactionService{
 		TransactionRepository: transactionRepository,
 		DB:                    db,
@@ -122,6 +109,25 @@ func main() {
 		UserService:        &userService,
 		WalletService:      &walletService,
 	}
+
+	router.GET("/api/users", userController.GetAll)
+	router.POST("/api/users", userController.Create)
+	router.GET("/api/users/:userId", userController.FindById)
+	router.PUT("/api/users/:userId", userController.Update)
+	router.DELETE("/api/users/:userId", userController.Delete)
+
+	router.GET("/api/categories", middleware.CorsMiddleware(categoryController.GetAll))
+	router.POST("/api/categories", middleware.CorsMiddleware(categoryController.Create))
+	router.GET("/api/categories/:categoryId", middleware.CorsMiddleware(categoryController.FindById))
+	router.PUT("/api/categories/:categoryId", middleware.CorsMiddleware(categoryController.Update))
+	router.DELETE("/api/categories/:categoryId", middleware.CorsMiddleware(categoryController.Delete))
+
+	router.GET("/api/wallets", middleware.CorsMiddleware(walletController.GetAll))
+	router.POST("/api/wallets", middleware.CorsMiddleware(walletController.Create))
+	router.GET("/api/wallets/:walletId", middleware.CorsMiddleware(walletController.FindById))
+	router.PUT("/api/wallets/:walletId", middleware.CorsMiddleware(walletController.Update))
+	router.DELETE("/api/wallets/:walletId", middleware.CorsMiddleware(walletController.Delete))
+
 	router.GET("/api/transactions", transactionController.GetAll)
 	router.POST("/api/transactions", transactionController.Create)
 	router.GET("/api/transactions/:transactionId", transactionController.FindById)
