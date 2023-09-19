@@ -127,6 +127,7 @@ func main() {
 	router.GET("/api/wallets/:walletId", middleware.CorsMiddleware(walletController.FindById))
 	router.PUT("/api/wallets/:walletId", middleware.CorsMiddleware(walletController.Update))
 	router.DELETE("/api/wallets/:walletId", middleware.CorsMiddleware(walletController.Delete))
+	router.GET("/api/wallets/:walletId/transactions", middleware.CorsMiddleware(walletController.GetWalletTransactions))
 
 	router.GET("/api/transactions", transactionController.GetAll)
 	router.POST("/api/transactions", transactionController.Create)

@@ -128,3 +128,32 @@ func (repository *WalletRepository) Delete(ctx context.Context, tx *sql.Tx, wall
 	_, err := tx.ExecContext(ctx, SQL, walletId)
 	helpers.PanicIfError(err)
 }
+
+func (repository *WalletRepository) GetWalletTransactions(ctx context.Context, tx *sql.Tx, walletId int32, userId int32) ([]domain.Transaction, error) {
+	SQL := "SELECT t.* FROM transactions t join wallets w on w.id = t.wallet_id WHERE wallet_id = $1 and user_id = $2"
+	rows, err := tx.QueryContext(ctx, SQL, walletId, userId)
+	helpers.PanicIfError(err)
+	defer rows.Close()
+
+	var transactions []domain.Transaction
+	for rows.Next() {
+		transaction := domain.Transaction{}
+		err := rows.Scan(
+			&transaction.ID,
+			&transaction.WalletID,
+			&transaction.CategoryID,
+			&transaction.Nominal,
+			&transaction.DateTime,
+			&transaction.CreatedAt,
+			&transaction.UpdatedAt,
+		)
+		helpers.PanicIfError(err)
+		transactions = append(transactions, transaction)
+	}
+
+	if len(transactions) != 0 {
+		return transactions, nil
+	}
+	return transactions, errors.New("wallet or transaction not found")
+
+}

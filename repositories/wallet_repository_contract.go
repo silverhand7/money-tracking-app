@@ -13,4 +13,5 @@ type WalletRepositoryContract interface {
 	Save(ctx context.Context, tx *sql.Tx, wallet domain.Wallet) domain.Wallet
 	Update(ctx context.Context, tx *sql.Tx, wallet domain.Wallet) domain.Wallet
 	Delete(ctx context.Context, tx *sql.Tx, walletId int32)
+	GetWalletTransactions(ctx context.Context, tx *sql.Tx, walletId int32, userId int32) ([]domain.Transaction, error)
 }

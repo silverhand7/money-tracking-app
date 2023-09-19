@@ -13,4 +13,5 @@ type WalletServiceContract interface {
 	Delete(ctx context.Context, walletId int32, userId int32)
 	FindById(ctx context.Context, walletId int32, userId int32) responses.WalletResponse
 	GetAll(ctx context.Context, userId int32) []responses.WalletResponse
+	GetWalletTransactions(ctx context.Context, walletId int32, userId int32) []responses.TransactionResponse
 }

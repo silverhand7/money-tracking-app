@@ -109,3 +109,20 @@ func (controller *WalletController) Delete(w http.ResponseWriter, r *http.Reques
 
 	helpers.WriteToResponseBody(w, webResponse)
 }
+
+func (controller *WalletController) GetWalletTransactions(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	apiKey := helpers.GetApiKey(r.Header)
+	user := controller.UserService.FindByApiKey(r.Context(), apiKey)
+	walletId, err := strconv.Atoi(params.ByName("walletId"))
+
+	helpers.PanicIfError(err)
+	transactionResponses := controller.WalletService.GetWalletTransactions(r.Context(), int32(walletId), user.ID)
+
+	webResponse := responses.WebResponse{
+		Code:   200,
+		Status: "OK",
+		Data:   transactionResponses,
+	}
+
+	helpers.WriteToResponseBody(w, webResponse)
+}
