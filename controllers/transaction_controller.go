@@ -41,6 +41,7 @@ func (controller *TransactionController) Create(w http.ResponseWriter, r *http.R
 
 	controller.WalletService.FindById(r.Context(), transactionCreateRequest.WalletID, user.ID)
 
+	transactionCreateRequest.UserID = user.ID
 	transactionResponse := controller.TransactionService.Create(r.Context(), transactionCreateRequest)
 
 	webResponse := responses.WebResponse{

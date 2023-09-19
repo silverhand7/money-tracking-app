@@ -130,7 +130,7 @@ func (repository *WalletRepository) Delete(ctx context.Context, tx *sql.Tx, wall
 }
 
 func (repository *WalletRepository) GetWalletTransactions(ctx context.Context, tx *sql.Tx, walletId int32, userId int32) ([]domain.Transaction, error) {
-	SQL := "SELECT t.* FROM transactions t join wallets w on w.id = t.wallet_id WHERE wallet_id = $1 and user_id = $2"
+	SQL := "SELECT t.* FROM transactions t join wallets w on w.id = t.wallet_id WHERE wallet_id = $1 and user_id = $2 ORDER BY date_time DESC"
 	rows, err := tx.QueryContext(ctx, SQL, walletId, userId)
 	helpers.PanicIfError(err)
 	defer rows.Close()
@@ -155,5 +155,35 @@ func (repository *WalletRepository) GetWalletTransactions(ctx context.Context, t
 		return transactions, nil
 	}
 	return transactions, errors.New("wallet or transaction not found")
+}
 
+func (repository *WalletRepository) UpdateBalance(ctx context.Context, tx *sql.Tx, wallet domain.Wallet) domain.Wallet {
+	SQL := `UPDATE wallets SET
+	balance = $2,
+	updated_at = $3
+	WHERE id = $1
+	RETURNING *`
+
+	row := tx.QueryRowContext(
+		ctx,
+		SQL,
+		wallet.ID,
+		wallet.Balance,
+		wallet.UpdatedAt,
+	)
+
+	err := row.Scan(
+		&wallet.ID,
+		&wallet.Name,
+		&wallet.Icon,
+		&wallet.Currency,
+		&wallet.Balance,
+		&wallet.UserID,
+		&wallet.CreatedAt,
+		&wallet.UpdatedAt,
+	)
+
+	helpers.PanicIfError(err)
+
+	return wallet
 }

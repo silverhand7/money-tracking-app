@@ -5,4 +5,5 @@ type TransactionCreateRequest struct {
 	CategoryID int32  `validate:"required" json:"category_id"`
 	Nominal    int64  `json:"nominal"`
 	DateTime   string `validate:"required" json:"date_time"`
+	UserID     int32  `validate:"required" json:"user_id"`
 }

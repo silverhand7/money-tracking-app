@@ -100,6 +100,8 @@ func main() {
 
 	transactionService := services.TransactionService{
 		TransactionRepository: transactionRepository,
+		WalletRepository:      walletRepository,
+		CategoryRepository:    categoryRepository,
 		DB:                    db,
 		Validate:              validate,
 	}

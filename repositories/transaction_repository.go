@@ -15,7 +15,7 @@ type TransactionRepository struct {
 func (repository *TransactionRepository) GetAll(ctx context.Context, tx *sql.Tx, userId int32) []domain.Transaction {
 	SQL := `SELECT t.id as id, wallet_id, category_id, nominal, date_time, t.created_at, t.updated_at
 		FROM transactions t join wallets w on w.id = t.wallet_id
-		WHERE user_id = $1`
+		WHERE user_id = $1 ORDER BY date_time DESC`
 	rows, err := tx.QueryContext(ctx, SQL, userId)
 	helpers.PanicIfError(err)
 	defer rows.Close()
