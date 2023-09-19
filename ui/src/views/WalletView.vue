@@ -54,7 +54,11 @@ export default {
                 'Authorization': 'Bearer 567311593646bec7c5b896f264f1b59dee9a1db599865d70bdc81a095a4cb5ad',
             }
         }
-        axios.get(config.basePath + "/api/wallets", headers)
+        axios.get(config.basePath + "/api/wallets", {
+            headers: {
+                'Authorization': 'Bearer 567311593646bec7c5b896f264f1b59dee9a1db599865d70bdc81a095a4cb5ad',
+            }
+        })
         .then((response) => {
             this.wallets = response.data.data
         })
