@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io/fs"
 	"net/http"
@@ -10,6 +11,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"github.com/silverhand7/money-tracking-app/app"
 	"github.com/silverhand7/money-tracking-app/controllers"
+	"github.com/silverhand7/money-tracking-app/database/seeders"
 	"github.com/silverhand7/money-tracking-app/exceptions"
 	"github.com/silverhand7/money-tracking-app/middleware"
 	"github.com/silverhand7/money-tracking-app/models/web/requests/validators"
@@ -39,11 +41,18 @@ func frontendHandler(w http.ResponseWriter, r *http.Request, params httprouter.P
 
 	rawFile, _ := ui.StaticFiles.ReadFile("dist/index.html")
 	w.Write(rawFile)
-
 }
 
 func main() {
 	db := app.NewDB()
+
+	isSeeder := flag.String("seeder", "", "")
+	flag.Parse()
+
+	if string(*isSeeder) == "true" {
+		seed := seeders.NewSeed(db)
+		seed.ExecuteSeeder()
+	}
 
 	validate := validator.New()
 	initValidator(*validate)
