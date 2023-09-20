@@ -2,6 +2,7 @@ package seeders
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"time"
 )
@@ -17,10 +18,37 @@ func NewSeed(db *sql.DB) Seed {
 }
 
 func (s Seed) ExecuteSeeder() {
+	s.TruncateTables()
 	s.CategorySeeder()
 	s.UserSeeder()
 	s.WalletSeeder()
 	s.TransactionSeeder()
+	fmt.Println("Refresh database done")
+}
+
+func (s Seed) TruncateTables() {
+	var err error
+	sql := "TRUNCATE TABLE transactions RESTART IDENTITY CASCADE"
+	_, err = s.db.Exec(sql)
+	if err != nil {
+		log.Fatalf("error truncate transactions: %v", err)
+	}
+
+	sql = "TRUNCATE TABLE wallets RESTART IDENTITY CASCADE"
+	_, err = s.db.Exec(sql)
+	if err != nil {
+		log.Fatalf("error truncate wallets: %v", err)
+	}
+	sql = "TRUNCATE TABLE users RESTART IDENTITY CASCADE"
+	_, err = s.db.Exec(sql)
+	if err != nil {
+		log.Fatalf("error truncate users: %v", err)
+	}
+	sql = "TRUNCATE TABLE categories RESTART IDENTITY CASCADE"
+	_, err = s.db.Exec(sql)
+	if err != nil {
+		log.Fatalf("error truncate categories: %v", err)
+	}
 }
 
 func (s Seed) UserSeeder() {
