@@ -45,11 +45,7 @@ export default {
         }
     },
     created() {
-        axios.get(config.basePath + "/api/categories", {
-            headers: {
-
-            }
-        })
+        axios.get(config.basePath + "/api/categories")
         .then((response) => {
             this.categories = response.data.data
         })

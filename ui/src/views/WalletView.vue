@@ -1,7 +1,7 @@
 <template>
     <!-- <CategoryForm class="category-form mb-4" @on-submit="addCategory" /> -->
     <div class="text-right mb-2">
-        <RouterLink :to="{ name: 'wallets.create' }" class="btn btn-secondary mb-2">Add New</RouterLink>
+        <RouterLink :to="{ name: 'wallets.create' }" class="btn btn-secondary mb-2">Add New Test</RouterLink>
     </div>
     <CardContainer class="overflow-x-auto h-fit">
         <PageTitle title="List Wallets" />
@@ -47,13 +47,6 @@ export default {
         }
     },
     created() {
-        let headers = {
-            headers: {
-                // 'Access-Control-Allow-Origin': '*',
-                // 'Content-Type': 'application/json',
-                'Authorization': 'Bearer 567311593646bec7c5b896f264f1b59dee9a1db599865d70bdc81a095a4cb5ad',
-            }
-        }
         axios.get(config.basePath + "/api/wallets", {
             headers: {
                 'Authorization': 'Bearer 567311593646bec7c5b896f264f1b59dee9a1db599865d70bdc81a095a4cb5ad',

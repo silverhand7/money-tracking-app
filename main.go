@@ -60,7 +60,6 @@ func main() {
 	router := httprouter.New()
 
 	router.GET("/", frontendHandler)
-	router.GET("/about", frontendHandler)
 	router.NotFound = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		frontendHandler(w, r, nil)
 	})
@@ -127,18 +126,18 @@ func main() {
 	router.PUT("/api/users/:userId", userController.Update)
 	router.DELETE("/api/users/:userId", userController.Delete)
 
-	router.GET("/api/categories", middleware.CorsMiddleware(categoryController.GetAll))
-	router.POST("/api/categories", middleware.CorsMiddleware(categoryController.Create))
-	router.GET("/api/categories/:categoryId", middleware.CorsMiddleware(categoryController.FindById))
-	router.PUT("/api/categories/:categoryId", middleware.CorsMiddleware(categoryController.Update))
-	router.DELETE("/api/categories/:categoryId", middleware.CorsMiddleware(categoryController.Delete))
+	router.GET("/api/categories", categoryController.GetAll)
+	router.POST("/api/categories", categoryController.Create)
+	router.GET("/api/categories/:categoryId", categoryController.FindById)
+	router.PUT("/api/categories/:categoryId", categoryController.Update)
+	router.DELETE("/api/categories/:categoryId", categoryController.Delete)
 
-	router.GET("/api/wallets", middleware.CorsMiddleware(walletController.GetAll))
-	router.POST("/api/wallets", middleware.CorsMiddleware(walletController.Create))
-	router.GET("/api/wallets/:walletId", middleware.CorsMiddleware(walletController.FindById))
-	router.PUT("/api/wallets/:walletId", middleware.CorsMiddleware(walletController.Update))
-	router.DELETE("/api/wallets/:walletId", middleware.CorsMiddleware(walletController.Delete))
-	router.GET("/api/wallets/:walletId/transactions", middleware.CorsMiddleware(walletController.GetWalletTransactions))
+	router.GET("/api/wallets", walletController.GetAll)
+	router.POST("/api/wallets", walletController.Create)
+	router.GET("/api/wallets/:walletId", walletController.FindById)
+	router.PUT("/api/wallets/:walletId", walletController.Update)
+	router.DELETE("/api/wallets/:walletId", walletController.Delete)
+	router.GET("/api/wallets/:walletId/transactions", walletController.GetWalletTransactions)
 
 	router.GET("/api/transactions", transactionController.GetAll)
 	router.POST("/api/transactions", transactionController.Create)
@@ -150,7 +149,7 @@ func main() {
 
 	server := &http.Server{
 		Addr:    "localhost:8080",
-		Handler: router,
+		Handler: middleware.NewCorsMiddleware(router),
 	}
 
 	err := server.ListenAndServe()
