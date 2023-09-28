@@ -14,4 +14,5 @@ type UserRepositoryContract interface {
 	FindById(ctx context.Context, tx *sql.Tx, userId int32) (domain.User, error)
 	FindByApiKey(ctx context.Context, tx *sql.Tx, apiKey string) (domain.User, error)
 	GetAll(ctx context.Context, tx *sql.Tx) []domain.User
+	FindByEmail(ctx context.Context, tx *sql.Tx, email string) (domain.User, error)
 }

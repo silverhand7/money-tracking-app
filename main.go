@@ -120,11 +120,23 @@ func main() {
 		WalletService:      &walletService,
 	}
 
+	authService := services.AuthService{
+		UserRepository: userRepository,
+		DB:             db,
+		Validate:       validate,
+	}
+
+	loginController := controllers.UserLoginController{
+		AuthService: &authService,
+	}
+
 	router.GET("/api/users", userController.GetAll)
 	router.POST("/api/users", userController.Create)
 	router.GET("/api/users/:userId", userController.FindById)
 	router.PUT("/api/users/:userId", userController.Update)
 	router.DELETE("/api/users/:userId", userController.Delete)
+
+	router.POST("/api/login", loginController.Login)
 
 	router.GET("/api/categories", categoryController.GetAll)
 	router.POST("/api/categories", categoryController.Create)

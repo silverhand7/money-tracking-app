@@ -49,7 +49,7 @@ export default {
     created() {
         axios.get(config.basePath + "/api/wallets", {
             headers: {
-                'Authorization': 'Bearer 567311593646bec7c5b896f264f1b59dee9a1db599865d70bdc81a095a4cb5ad',
+                'Authorization': 'Bearer bfe61cc1e05322127f7d5a0288b98f3701d627cefdd8659d58f5354b7e7d7d9d',
             }
         })
         .then((response) => {
@@ -58,8 +58,6 @@ export default {
         .catch((error) => {
             console.error('Error fetching data:', error);
         });
-
-
     },
 }
 

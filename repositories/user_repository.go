@@ -107,6 +107,30 @@ func (userRepository *UserRepository) FindByApiKey(ctx context.Context, tx *sql.
 	return user, errors.New("user is not found")
 }
 
+func (userRepository *UserRepository) FindByEmail(ctx context.Context, tx *sql.Tx, email string) (domain.User, error) {
+	SQL := "SELECT * FROM users WHERE email = $1"
+	rows, err := tx.QueryContext(ctx, SQL, email)
+	helpers.PanicIfError(err)
+
+	defer rows.Close()
+	user := domain.User{}
+	if rows.Next() {
+		err := rows.Scan(
+			&user.ID,
+			&user.Name,
+			&user.Email,
+			&user.Password,
+			&user.CreatedAt,
+			&user.UpdatedAt,
+			&user.ApiKey,
+		)
+		helpers.PanicIfError(err)
+		return user, nil
+	}
+
+	return user, errors.New("the email is invalid")
+}
+
 func (userRepository *UserRepository) Update(ctx context.Context, tx *sql.Tx, user domain.User) domain.User {
 	SQL := `UPDATE users SET
 	name = $2,
