@@ -31,7 +31,7 @@ export default {
     created() {
         axios.get(config.basePath + "/api/wallets", {
             headers: {
-                'Authorization': 'Bearer bfe61cc1e05322127f7d5a0288b98f3701d627cefdd8659d58f5354b7e7d7d9d',
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('user')).api_key
             }
         })
         .then((response) => {

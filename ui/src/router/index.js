@@ -12,7 +12,6 @@ const router = createRouter({
       path: '/',
       name: 'home',
       alias: ['/index.html'],
-      // component: HomeView
       component: () => import('@/views/CategoryView.vue'),
       meta: {
         requiresAuth: true
@@ -21,9 +20,6 @@ const router = createRouter({
     {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue')
     },
     {
@@ -59,6 +55,14 @@ const router = createRouter({
       }
     },
     {
+      path: '/wallets/:walletId/transactions',
+      name: 'wallets.transactions',
+      component: () => import('@/views/TransactionsView.vue'),
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
       path: '/user',
       name: 'user',
       component: () => import('@/views/UserView.vue'),
@@ -81,10 +85,8 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth) {
     const user = localStorage.getItem('user');
     if (user) {
-      // User is authenticated, proceed to the route
       next();
     } else {
-      // User is not authenticated, redirect to login
       next('/login');
     }
   } else {
