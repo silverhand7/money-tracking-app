@@ -20,7 +20,7 @@ import { RouterLink, RouterView } from 'vue-router'
       <RouterLink to="/" class="py-3 max-w-[25px]">
         <img src="@/assets/images/trend.png" alt="trend">
       </RouterLink>
-      <RouterLink to="/about" class="py-3 max-w-[25px]">
+      <RouterLink to="/user" class="py-3 max-w-[25px]">
         <img src="@/assets/images/user.png" alt="user">
       </RouterLink>
     </footer>
