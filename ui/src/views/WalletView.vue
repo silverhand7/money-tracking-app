@@ -3,34 +3,16 @@
     <div class="text-right mb-2">
         <RouterLink :to="{ name: 'wallets.create' }" class="btn btn-secondary mb-2">Add New</RouterLink>
     </div>
-    <CardContainer class="overflow-x-auto h-fit">
-        <PageTitle title="List Wallets" />
-        <div class="overflow-x-auto">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Currency</th>
-                        <th>Balance</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="wallet in wallets">
-                        <td>{{ wallet.id }}</td>
-                        <td>{{ wallet.name }}</td>
-                        <td>{{ wallet.currency }}</td>
-                        <td>{{ wallet.balance }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </CardContainer>
+    <WalletList
+        v-for="wallet in wallets"
+        :key="wallet.id"
+        :wallet="wallet"
+    />
 </template>
 
 <script>
 import CategoryForm from '@/components/Forms/CategoryForm.vue';
-import CardContainer from '@/components/CardContainer.vue';
+import WalletList from '@/components/WalletList.vue';
 import PageTitle from '@/components/PageTitle.vue';
 import axios from 'axios'
 import config from '@/config.js'
@@ -38,7 +20,7 @@ import config from '@/config.js'
 export default {
     components: {
         CategoryForm,
-        CardContainer,
+        WalletList,
         PageTitle,
     },
     data() {
