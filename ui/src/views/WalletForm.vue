@@ -30,15 +30,16 @@
             placeholder="Initial Balance"
         />
         <ErrorField
-            v-if="nameError"
-            :message="nameError"
+            v-if="balanceError"
+            :message="balanceError"
         />
 
         <Button
-                class="btn-neutral mt-4"
-                text="Save"
-                type="submit"
-            />
+            @click="addWallet"
+            class="btn-neutral mt-4"
+            text="Save"
+            type="submit"
+        />
     </CardContainer>
 </template>
 
@@ -50,6 +51,9 @@ import FormNumber from '@/components/FormNumber.vue';
 import Button from '@/components/Button.vue';
 import ErrorField from '@/components/ErrorField.vue';
 import FormSelectOption from '@/components/FormSelectOption.vue';
+import config from '@/config.js'
+import axios from 'axios'
+import router from '../router';
 
 export default {
     components: {
@@ -82,9 +86,30 @@ export default {
                 },
             ],
             balance: "",
+            balanceError: "",
         }
     },
-
+    methods: {
+        addWallet() {
+            axios.post(
+                config.basePath + "/api/wallets",
+                {
+                    name: this.name,
+                    currency: this.currency,
+                    balance: parseInt(this.balance.replace(/[^0-9]/g, '')),
+                },
+                {
+                    headers: {
+                        'Content-Type': 'text/plain; charset=utf-8',
+                        'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('user')).api_key
+                    }
+                }
+            )
+            .then((response) => {
+                router.push({name: 'wallets'})
+            })
+        }
+    }
 }
 
 </script>
