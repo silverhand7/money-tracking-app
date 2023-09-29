@@ -1,7 +1,7 @@
 <template>
     <!-- <CategoryForm class="category-form mb-4" @on-submit="addCategory" /> -->
     <div class="text-right mb-2">
-        <RouterLink :to="{ name: 'wallets.create' }" class="btn btn-secondary mb-2">Add New Test</RouterLink>
+        <RouterLink :to="{ name: 'wallets.create' }" class="btn btn-secondary mb-2">Add New</RouterLink>
     </div>
     <CardContainer class="overflow-x-auto h-fit">
         <PageTitle title="List Wallets" />

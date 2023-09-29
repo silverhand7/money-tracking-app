@@ -14,7 +14,7 @@ import { RouterLink, RouterView } from 'vue-router'
       <RouterLink to="/" class="py-3 max-w-[25px]">
         <img src="@/assets/images/home.png" alt="home">
       </RouterLink>
-      <RouterLink to="/about" class="py-3 max-w-[25px]">
+      <RouterLink to="/wallets" class="py-3 max-w-[25px]">
         <img src="@/assets/images/wallet.png" alt="wallet">
       </RouterLink>
       <RouterLink to="/" class="py-3 max-w-[25px]">

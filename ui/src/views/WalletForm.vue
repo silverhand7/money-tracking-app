@@ -1,5 +1,90 @@
 <template>
-    <div>
+    <CardContainer>
+        <PageTitle title="Create New Wallet" />
+        <FormInput
+            :model-value="name"
+            @update:model-value="newValue => name = newValue"
+            label="Name"
+            placeholder="Wallet Name"
+        />
+        <ErrorField
+            v-if="nameError"
+            :message="nameError"
+        />
 
-    </div>
+        <FormSelectOption
+            model-value=""
+            @update:model-value="newValue => currency = newValue"
+            :options="currencyOptions"
+            label="Currency"
+        />
+        <ErrorField
+            v-if="currencyError"
+            :message="currencyError"
+        />
+
+        <FormNumber
+            :model-value="balance"
+            @update:model-value="newValue => balance = newValue"
+            label="Balance"
+            placeholder="Initial Balance"
+        />
+        <ErrorField
+            v-if="nameError"
+            :message="nameError"
+        />
+
+        <Button
+                class="btn-neutral mt-4"
+                text="Save"
+                type="submit"
+            />
+    </CardContainer>
 </template>
+
+<script>
+import CardContainer from '@/components/CardContainer.vue';
+import PageTitle from '@/components/PageTitle.vue';
+import FormInput from '@/components/FormInput.vue';
+import FormNumber from '@/components/FormNumber.vue';
+import Button from '@/components/Button.vue';
+import ErrorField from '@/components/ErrorField.vue';
+import FormSelectOption from '@/components/FormSelectOption.vue';
+
+export default {
+    components: {
+        CardContainer,
+        PageTitle,
+        FormInput,
+        FormNumber,
+        Button,
+        ErrorField,
+        FormSelectOption
+    },
+    data() {
+        return {
+            name: '',
+            nameError: '',
+            currency: '',
+            currencyError: '',
+            currencyOptions: [
+                {
+                    name: 'USD',
+                    value: 'USD'
+                },
+                {
+                    name: 'IDR',
+                    value: 'IDR'
+                },
+                {
+                    name: 'SGD',
+                    value: 'SGD'
+                },
+            ],
+            balance: "",
+        }
+    },
+
+}
+
+</script>
