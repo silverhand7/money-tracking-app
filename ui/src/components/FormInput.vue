@@ -3,7 +3,13 @@
         <label class="label">
             <span class="label-text">{{ label }}</span>
         </label>
-        <input @keyup="sendValue" :type="type" :placeholder="placeholder" class="input input-bordered" />
+        <input
+            :value="modelValue"
+            @input="$emit('update:modelValue', $event.target.value)"
+            :type="type"
+            :placeholder="placeholder"
+            class="input input-bordered"
+        />
     </div>
 </template>
 
@@ -11,6 +17,10 @@
 
 export default {
     props:{
+        modelValue: {
+            type: String,
+            default: "",
+        },
         label: {
             type: String,
             default: ""
@@ -27,11 +37,6 @@ export default {
     data(){
         return {
             input: ""
-        }
-    },
-    methods: {
-        sendValue(event){
-            this.$emit('emitValue', event.target.value)
         }
     }
 }

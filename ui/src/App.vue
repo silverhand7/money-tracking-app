@@ -6,9 +6,7 @@ import { RouterLink, RouterView } from 'vue-router'
   <div class="max-w-xl min-h-screen h-full mx-auto bg-slate-100 relative">
     <div class="w-100 px-5 pt-5 pb-16">
       <RouterView v-slot="{ Component }">
-
           <Component :is="Component" />
-
       </RouterView>
     </div>
 
