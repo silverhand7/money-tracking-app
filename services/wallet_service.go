@@ -103,6 +103,10 @@ func (service *WalletService) Create(ctx context.Context, request requests.Walle
 		DateTime:   time.Now(),
 		CreatedAt:  time.Now(),
 		UpdatedAt:  time.Now(),
+		Note: sql.NullString{
+			String: "Initial Balance",
+			Valid:  true,
+		},
 	})
 
 	return responses.WalletResponse{

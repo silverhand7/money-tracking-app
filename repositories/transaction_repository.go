@@ -13,7 +13,7 @@ type TransactionRepository struct {
 }
 
 func (repository *TransactionRepository) GetAll(ctx context.Context, tx *sql.Tx, userId int32) []domain.Transaction {
-	SQL := `SELECT t.id as id, wallet_id, category_id, nominal, date_time, t.created_at, t.updated_at
+	SQL := `SELECT t.id as id, wallet_id, category_id, nominal, date_time, t.created_at, t.updated_at, t.note
 		FROM transactions t join wallets w on w.id = t.wallet_id
 		WHERE user_id = $1 ORDER BY date_time DESC`
 	rows, err := tx.QueryContext(ctx, SQL, userId)
@@ -31,6 +31,7 @@ func (repository *TransactionRepository) GetAll(ctx context.Context, tx *sql.Tx,
 			&transaction.DateTime,
 			&transaction.CreatedAt,
 			&transaction.UpdatedAt,
+			&transaction.Note,
 		)
 		helpers.PanicIfError(err)
 		transactions = append(transactions, transaction)
@@ -40,7 +41,7 @@ func (repository *TransactionRepository) GetAll(ctx context.Context, tx *sql.Tx,
 }
 
 func (repository *TransactionRepository) FindById(ctx context.Context, tx *sql.Tx, transactionId int32, userId int32) (domain.Transaction, error) {
-	SQL := `SELECT t.id, wallet_id, category_id, nominal, date_time, t.created_at, t.updated_at
+	SQL := `SELECT t.id, wallet_id, category_id, nominal, date_time, t.created_at, t.updated_at, t.note
 		FROM transactions t join wallets w on w.id = t.wallet_id
 		WHERE t.id = $1 AND user_id = $2`
 	rows, err := tx.QueryContext(ctx, SQL, transactionId, userId)
@@ -57,6 +58,7 @@ func (repository *TransactionRepository) FindById(ctx context.Context, tx *sql.T
 			&transaction.DateTime,
 			&transaction.CreatedAt,
 			&transaction.UpdatedAt,
+			&transaction.Note,
 		)
 		helpers.PanicIfError(err)
 		return transaction, nil
@@ -66,7 +68,11 @@ func (repository *TransactionRepository) FindById(ctx context.Context, tx *sql.T
 }
 
 func (repository *TransactionRepository) Save(ctx context.Context, tx *sql.Tx, transaction domain.Transaction) domain.Transaction {
-	SQL := "INSERT INTO transactions (wallet_id, category_id, nominal, date_time, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id"
+	SQL := `INSERT INTO transactions
+		(wallet_id, category_id, nominal, date_time, created_at, updated_at, note)
+		VALUES
+		($1, $2, $3, $4, $5, $6, $7)
+		RETURNING id`
 
 	var id int32
 	err := tx.QueryRowContext(
@@ -93,7 +99,7 @@ func (repository *TransactionRepository) Update(ctx context.Context, tx *sql.Tx,
 	category_id = $3,
 	nominal = $4,
 	date_time = $5,
-	note = $6
+	note = $6,
 	updated_at = $7
 	WHERE id = $1
 	RETURNING *`
@@ -106,6 +112,7 @@ func (repository *TransactionRepository) Update(ctx context.Context, tx *sql.Tx,
 		transaction.CategoryID,
 		transaction.Nominal,
 		transaction.DateTime,
+		transaction.Note,
 		transaction.UpdatedAt,
 	)
 
@@ -117,6 +124,7 @@ func (repository *TransactionRepository) Update(ctx context.Context, tx *sql.Tx,
 		&transaction.DateTime,
 		&transaction.CreatedAt,
 		&transaction.UpdatedAt,
+		&transaction.Note,
 	)
 
 	helpers.PanicIfError(err)

@@ -3,7 +3,6 @@ package services
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"time"
 
 	"github.com/go-playground/validator"
@@ -37,6 +36,7 @@ func (service *TransactionService) GetAll(ctx context.Context, userId int32) []r
 			WalletID:   transaction.WalletID,
 			CategoryID: transaction.CategoryID,
 			Nominal:    transaction.Nominal,
+			Note:       transaction.Note.String,
 			DateTime:   transaction.DateTime,
 			CreatedAt:  transaction.CreatedAt,
 			UpdatedAt:  transaction.UpdatedAt,
@@ -61,6 +61,7 @@ func (service *TransactionService) FindById(ctx context.Context, transactionId i
 		WalletID:   transaction.WalletID,
 		CategoryID: transaction.CategoryID,
 		Nominal:    transaction.Nominal,
+		Note:       transaction.Note.String,
 		DateTime:   transaction.DateTime,
 		CreatedAt:  transaction.CreatedAt,
 		UpdatedAt:  transaction.UpdatedAt,
@@ -95,9 +96,13 @@ func (service *TransactionService) Create(ctx context.Context, request requests.
 		WalletID:   request.WalletID,
 		CategoryID: request.CategoryID,
 		Nominal:    request.Nominal,
-		DateTime:   date,
-		CreatedAt:  time.Now().UTC(),
-		UpdatedAt:  time.Now().UTC(),
+		Note: sql.NullString{
+			String: request.Note,
+			Valid:  true,
+		},
+		DateTime:  date,
+		CreatedAt: time.Now().UTC(),
+		UpdatedAt: time.Now().UTC(),
 	}
 
 	transaction = service.TransactionRepository.Save(ctx, tx, transaction)
@@ -119,6 +124,7 @@ func (service *TransactionService) Create(ctx context.Context, request requests.
 		WalletID:   transaction.WalletID,
 		CategoryID: transaction.CategoryID,
 		Nominal:    transaction.Nominal,
+		Note:       transaction.Note.String,
 		DateTime:   transaction.DateTime,
 		CreatedAt:  transaction.CreatedAt,
 		UpdatedAt:  transaction.UpdatedAt,
@@ -150,8 +156,6 @@ func (service *TransactionService) Update(ctx context.Context, request requests.
 
 	wallet.Balance += t.Nominal
 
-	fmt.Println(wallet.Balance)
-
 	dateLayout := "2006-01-02 15:04:05"
 	date, err := time.Parse(dateLayout, request.DateTime)
 	helpers.PanicIfError(err)
@@ -161,9 +165,13 @@ func (service *TransactionService) Update(ctx context.Context, request requests.
 		WalletID:   request.WalletID,
 		CategoryID: request.CategoryID,
 		Nominal:    request.Nominal,
-		DateTime:   date,
-		CreatedAt:  time.Now().UTC(),
-		UpdatedAt:  time.Now().UTC(),
+		Note: sql.NullString{
+			String: request.Note,
+			Valid:  true,
+		},
+		DateTime:  date,
+		CreatedAt: time.Now().UTC(),
+		UpdatedAt: time.Now().UTC(),
 	}
 
 	transaction = service.TransactionRepository.Update(ctx, tx, transaction)
@@ -185,6 +193,7 @@ func (service *TransactionService) Update(ctx context.Context, request requests.
 		WalletID:   transaction.WalletID,
 		CategoryID: transaction.CategoryID,
 		Nominal:    transaction.Nominal,
+		Note:       transaction.Note.String,
 		DateTime:   transaction.DateTime,
 		CreatedAt:  transaction.CreatedAt,
 		UpdatedAt:  transaction.UpdatedAt,

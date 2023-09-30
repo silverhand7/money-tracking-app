@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"database/sql"
 	"time"
 )
 
@@ -10,7 +11,7 @@ type Transaction struct {
 	CategoryID int32
 	Nominal    int64
 	DateTime   time.Time
-	Note       string
+	Note       sql.NullString
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 }
