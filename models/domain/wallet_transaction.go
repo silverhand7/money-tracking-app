@@ -1,16 +1,18 @@
 package domain
 
 import (
+	"database/sql"
 	"time"
 )
 
-type Transaction struct {
+type WalletTransaction struct {
 	ID         int32
 	WalletID   int32
 	CategoryID int32
 	Nominal    int64
+	Type       string
+	Note       sql.NullString
 	DateTime   time.Time
-	Note       string
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 }

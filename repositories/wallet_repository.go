@@ -129,15 +129,20 @@ func (repository *WalletRepository) Delete(ctx context.Context, tx *sql.Tx, wall
 	helpers.PanicIfError(err)
 }
 
-func (repository *WalletRepository) GetWalletTransactions(ctx context.Context, tx *sql.Tx, walletId int32, userId int32) ([]domain.Transaction, error) {
-	SQL := "SELECT t.* FROM transactions t join wallets w on w.id = t.wallet_id WHERE wallet_id = $1 and user_id = $2 ORDER BY date_time DESC"
+func (repository *WalletRepository) GetWalletTransactions(ctx context.Context, tx *sql.Tx, walletId int32, userId int32) ([]domain.WalletTransaction, error) {
+	SQL := `SELECT t.*, c.type
+		FROM transactions t
+		join wallets w on w.id = t.wallet_id
+		join categories c on c.id = t.category_id
+		WHERE wallet_id = $1 and user_id = $2
+		ORDER BY date_time DESC`
 	rows, err := tx.QueryContext(ctx, SQL, walletId, userId)
 	helpers.PanicIfError(err)
 	defer rows.Close()
 
-	var transactions []domain.Transaction
+	var walletTransactions []domain.WalletTransaction
 	for rows.Next() {
-		transaction := domain.Transaction{}
+		transaction := domain.WalletTransaction{}
 		err := rows.Scan(
 			&transaction.ID,
 			&transaction.WalletID,
@@ -146,15 +151,17 @@ func (repository *WalletRepository) GetWalletTransactions(ctx context.Context, t
 			&transaction.DateTime,
 			&transaction.CreatedAt,
 			&transaction.UpdatedAt,
+			&transaction.Note,
+			&transaction.Type,
 		)
 		helpers.PanicIfError(err)
-		transactions = append(transactions, transaction)
+		walletTransactions = append(walletTransactions, transaction)
 	}
 
-	if len(transactions) != 0 {
-		return transactions, nil
+	if len(walletTransactions) != 0 {
+		return walletTransactions, nil
 	}
-	return transactions, errors.New("wallet or transaction not found")
+	return walletTransactions, errors.New("wallet or transaction not found")
 }
 
 func (repository *WalletRepository) UpdateBalance(ctx context.Context, tx *sql.Tx, wallet domain.Wallet) domain.Wallet {

@@ -78,6 +78,7 @@ func (repository *TransactionRepository) Save(ctx context.Context, tx *sql.Tx, t
 		transaction.DateTime,
 		transaction.CreatedAt,
 		transaction.UpdatedAt,
+		transaction.Note,
 	).Scan(&id)
 
 	helpers.PanicIfError(err)
@@ -92,7 +93,8 @@ func (repository *TransactionRepository) Update(ctx context.Context, tx *sql.Tx,
 	category_id = $3,
 	nominal = $4,
 	date_time = $5,
-	updated_at = $6
+	note = $6
+	updated_at = $7
 	WHERE id = $1
 	RETURNING *`
 

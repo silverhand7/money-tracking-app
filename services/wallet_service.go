@@ -176,29 +176,31 @@ func (service *WalletService) Delete(ctx context.Context, walletId int32, userId
 	service.WalletRepository.Delete(ctx, tx, wallet.ID)
 }
 
-func (service *WalletService) GetWalletTransactions(ctx context.Context, walletId int32, userId int32) []responses.TransactionResponse {
+func (service *WalletService) GetWalletTransactions(ctx context.Context, walletId int32, userId int32) []responses.WalletTransactionResponse {
 	tx, err := service.DB.Begin()
 	helpers.PanicIfError(err)
 	defer helpers.CommitOrRollback(tx)
 
-	transactions, err := service.WalletRepository.GetWalletTransactions(ctx, tx, walletId, userId)
+	walletTransactions, err := service.WalletRepository.GetWalletTransactions(ctx, tx, walletId, userId)
 	if err != nil {
 		panic(exceptions.NewNotFoundError(err.Error()))
 	}
 
-	var transactionResponses []responses.TransactionResponse
-	for _, transaction := range transactions {
-		transactionResponses = append(transactionResponses, responses.TransactionResponse{
+	var walletTransactionResponses []responses.WalletTransactionResponse
+	for _, transaction := range walletTransactions {
+		walletTransactionResponses = append(walletTransactionResponses, responses.WalletTransactionResponse{
 			ID:         transaction.ID,
 			WalletID:   transaction.WalletID,
 			CategoryID: transaction.CategoryID,
 			Nominal:    transaction.Nominal,
+			Type:       transaction.Type,
+			Note:       transaction.Note.String,
 			DateTime:   transaction.DateTime,
 			CreatedAt:  transaction.CreatedAt,
 			UpdatedAt:  transaction.UpdatedAt,
 		})
 	}
 
-	return transactionResponses
+	return walletTransactionResponses
 
 }

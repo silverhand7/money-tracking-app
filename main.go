@@ -12,7 +12,6 @@ import (
 	"github.com/silverhand7/money-tracking-app/app"
 	"github.com/silverhand7/money-tracking-app/controllers"
 	"github.com/silverhand7/money-tracking-app/database/seeders"
-	"github.com/silverhand7/money-tracking-app/exceptions"
 	"github.com/silverhand7/money-tracking-app/middleware"
 	"github.com/silverhand7/money-tracking-app/models/web/requests/validators"
 	"github.com/silverhand7/money-tracking-app/repositories"
@@ -157,7 +156,7 @@ func main() {
 	router.PUT("/api/transactions/:transactionId", transactionController.Update)
 	router.DELETE("/api/transactions/:transactionId", transactionController.Delete)
 
-	router.PanicHandler = exceptions.ErrorHandler
+	// router.PanicHandler = exceptions.ErrorHandler
 
 	server := &http.Server{
 		Addr:    "localhost:8080",
