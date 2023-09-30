@@ -12,6 +12,8 @@ type WalletTransaction struct {
 	Nominal    int64
 	Type       string
 	Note       sql.NullString
+	Icon       sql.NullString
+	Name       string
 	DateTime   time.Time
 	CreatedAt  time.Time
 	UpdatedAt  time.Time

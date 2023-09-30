@@ -11,6 +11,8 @@ type WalletTransactionResponse struct {
 	Nominal    int64     `json:"nominal"`
 	Type       string    `json:"type"`
 	Note       string    `json:"note"`
+	Name       string    `json:"name"`
+	Icon       string    `json:"icon"`
 	DateTime   time.Time `json:"date_time"`
 	CreatedAt  time.Time `json:"created_at"`
 	UpdatedAt  time.Time `json:"updated_at"`

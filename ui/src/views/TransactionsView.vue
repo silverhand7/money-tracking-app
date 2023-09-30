@@ -27,15 +27,20 @@
         </div>
         <div
             v-for="transaction in transactionList"
-            class="flex gap-3 justify-between"
+            class="flex gap-3 justify-between mb-4"
         >
-            <div>
-                Transportation {{ transaction.category_id }}
-                <p class="text-sm text-gray-400">
-                    Notes nya
-                </p>
+            <div class="flex gap-4">
+                <div class="w-10">
+                    <img src="@/assets/images/wallet-image.png" alt="Icon">
+                </div>
+                <div>
+                    {{ transaction.name }}
+                    <p class="text-sm text-gray-400">
+                        {{ transaction.note }}
+                    </p>
+                </div>
             </div>
-            <div>
+            <div :class="[transaction.type == 'E' ? 'text-red-500' : 'text-green-500']">
                 {{ transaction.nominal }}
             </div>
         </div>

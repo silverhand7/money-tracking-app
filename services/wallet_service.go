@@ -199,6 +199,8 @@ func (service *WalletService) GetWalletTransactions(ctx context.Context, walletI
 			Nominal:    transaction.Nominal,
 			Type:       transaction.Type,
 			Note:       transaction.Note.String,
+			Icon:       transaction.Icon.String,
+			Name:       transaction.Name,
 			DateTime:   transaction.DateTime,
 			CreatedAt:  transaction.CreatedAt,
 			UpdatedAt:  transaction.UpdatedAt,

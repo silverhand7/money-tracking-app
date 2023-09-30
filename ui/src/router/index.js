@@ -63,6 +63,14 @@ const router = createRouter({
       }
     },
     {
+      path: '/transactions/create',
+      name: 'transactions.create',
+      component: () => import('@/views/TransactionForm.vue'),
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
       path: '/user',
       name: 'user',
       component: () => import('@/views/UserView.vue'),

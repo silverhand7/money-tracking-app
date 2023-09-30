@@ -130,7 +130,8 @@ func (repository *WalletRepository) Delete(ctx context.Context, tx *sql.Tx, wall
 }
 
 func (repository *WalletRepository) GetWalletTransactions(ctx context.Context, tx *sql.Tx, walletId int32, userId int32) ([]domain.WalletTransaction, error) {
-	SQL := `SELECT t.*, c.type
+	SQL := `SELECT t.*,
+		c.type, c.icon, c.name
 		FROM transactions t
 		join wallets w on w.id = t.wallet_id
 		join categories c on c.id = t.category_id
@@ -153,6 +154,8 @@ func (repository *WalletRepository) GetWalletTransactions(ctx context.Context, t
 			&transaction.UpdatedAt,
 			&transaction.Note,
 			&transaction.Type,
+			&transaction.Icon,
+			&transaction.Name,
 		)
 		helpers.PanicIfError(err)
 		walletTransactions = append(walletTransactions, transaction)
