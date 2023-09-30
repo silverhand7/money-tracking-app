@@ -1,10 +1,19 @@
 <template>
+    <CardContainer>
+        <div class="text-center">
+            <span class="text-xs text-gray-400">{{ wallet.name }}</span>
+            <h1 class="text-2xl">{{ wallet.currency + ' ' + wallet.balance }}</h1>
+        </div>
+    </CardContainer>
     <div>
-        Transactions {{ wallet.name }}
-        <ul>
-            <li v-for="transaction in transactions">
-                {{ transaction.nominal }} {{ transaction.date_time }} {{ transaction.type }}
-                {{ transaction }}
+        <ul v-for="(transactionList, date) in transactions"
+            :key="date"
+        >
+            <li v-for="transaction in transactionList"
+                :key="transaction.id"
+            >
+                {{ date }} <br>
+                {{ transaction.nominal }}
             </li>
         </ul>
     </div>
@@ -13,8 +22,13 @@
 <script>
 import axios from 'axios';
 import config from '@/config.js'
+import CardContainer from '@/components/CardContainer.vue'
+import dayjs from 'dayjs'
 
 export default {
+    components: {
+        CardContainer
+    },
     data() {
         return {
             wallet: '',
@@ -40,7 +54,18 @@ export default {
             }
         })
         .then((response) => {
-            this.transactions = response.data.data
+            let transactions = response.data.data
+            transactions.map((value) => {
+                value.date = dayjs(value.date_time).format('YYYY-MM-DD')
+                return value
+            })
+            let grouped = transactions.reduce(function (r, a) {
+                r[a.date] = r[a.date] || [];
+                r[a.date].push(a);
+                return r;
+            }, Object.create(null));
+
+            this.transactions = grouped
         })
         .catch((error) => {
             console.error('Error fetching data:', error);
