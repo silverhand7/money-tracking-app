@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: app
+    build:
+      context: "."
+      dockerfile: Dockerfile
+    image: "money-tracking-app"
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./:/app
+    networks:
+      - mta-network
+
+  database:
+    container_name: mta-database
+    image: postgres:13-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: money-tracking-app
+    networks:
+      - mta-network
+
+networks:
+  mta-network:
+    name: mta-network
+    driver: bridge
