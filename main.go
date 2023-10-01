@@ -171,7 +171,6 @@ func main() {
 }
 
 func initValidator(v validator.Validate) {
-	// Register the custom validation function.
 	v.RegisterValidation("passwordValidator", validators.PasswordValidator)
 	v.RegisterValidation("categoryTypeValidator", validators.ValidateType)
 }
