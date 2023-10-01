@@ -14,8 +14,6 @@ RUN curl -fsSL \
     https://raw.githubusercontent.com/pressly/goose/master/install.sh |\
     sh
 
-CMD go run main.go
-
 EXPOSE 8080
 
 # RUN go build -o /money-tracking-app

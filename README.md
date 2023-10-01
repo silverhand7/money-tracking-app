@@ -1,6 +1,6 @@
 # money-tracking-app
 
-This app can track your income and expenses. 
+This app can track your income and expenses.
 
 To run this project:
 - Clone
