@@ -8,6 +8,8 @@ RUN go mod download
 
 COPY . ./
 
+RUN apk --no-cache add curl
+
 RUN curl -fsSL \
     https://raw.githubusercontent.com/pressly/goose/master/install.sh |\
     sh

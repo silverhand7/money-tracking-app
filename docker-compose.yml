@@ -1,8 +1,8 @@
 version: '3.8'
 
 services:
-  app:
-    container_name: app
+  money-tracking-app:
+    container_name: money-tracking-app
     build:
       context: "."
       dockerfile: Dockerfile
@@ -13,6 +13,8 @@ services:
       - ./:/app
     networks:
       - mta-network
+    depends_on:
+      - database
 
   database:
     container_name: mta-database
