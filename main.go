@@ -160,7 +160,7 @@ func main() {
 	router.PanicHandler = exceptions.ErrorHandler
 
 	server := &http.Server{
-		Addr:    "localhost:8080",
+		Addr:    ":8080",
 		Handler: middleware.NewCorsMiddleware(router),
 	}
 
