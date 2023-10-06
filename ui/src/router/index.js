@@ -93,6 +93,7 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth) {
     const user = localStorage.getItem('user');
     if (user) {
+      // call API to get User
       next();
     } else {
       next('/login');
